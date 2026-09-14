@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>HomeScore 21:9 · 全家协同积分与成长看板</title>
+  <link rel="stylesheet" href="./style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&family=Noto+Sans+SC:wght@400;500;700;900&display=swap" rel="stylesheet">
+  <!-- Canvas Confetti for Celebration -->
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
+</head>
+<body class="theme-dark">
+  <!-- Audio Context & Tone Synthesizer will be initialized in app.js -->
+
+  <div class="screen-container">
+    <!-- Top Header: Command Bar -->
+    <header class="top-nav">
+      <div class="nav-left">
+        <div class="brand-logo">
+          <span class="logo-icon">🏆</span>
+          <div class="brand-text">
+            <div class="brand-title" id="family-name">幸福二孩模范家</div>
+            <div class="brand-sub" id="family-motto">全家同行 · 互助自律 · 快乐成长</div>
+          </div>
+        </div>
+        <div class="ultra-badge">21:9 宽屏指挥舱</div>
+      </div>
+
+      <div class="nav-center">
+        <div class="stat-pill streak-pill">
+          <span class="pill-icon">🔥</span>
+          <span class="pill-label">连续打卡</span>
+          <span class="pill-value" id="stat-streak">15 天</span>
+        </div>
+        <div class="stat-pill family-score-pill">
+          <span class="pill-icon">⭐</span>
+          <span class="pill-label">家庭总能值</span>
+          <span class="pill-value" id="stat-family-score">630 分</span>
+        </div>
+        <div class="stat-pill today-gain-pill">
+          <span class="pill-icon">📈</span>
+          <span class="pill-label">今日新增</span>
+          <span class="pill-value" id="stat-today-gain">+75 分</span>
+        </div>
+        <div class="current-time-pill" id="current-clock">
+          15:30:00 星期一
+        </div>
+      </div>
+
+      <div class="nav-right">
+        <button id="btn-sound-toggle" class="nav-btn" title="音效开关">
+          <span class="btn-icon" id="sound-icon">🔊</span>
+          <span class="btn-label">音效开启</span>
+        </button>
+        <button id="btn-fullscreen" class="nav-btn" title="全屏显示">
+          <span class="btn-icon">⛶</span>
+          <span class="btn-label">全屏看板</span>
+        </button>
+        <!-- Dedicated Link for Character Configuration -->
+        <a href="./config.html" class="nav-btn nav-btn-primary config-link" id="link-config">
+          <span class="btn-icon">⚙️</span>
+          <span class="btn-label">人物与家庭配置中心</span>
+        </a>
+      </div>
+    </header>
+
+    <!-- Main Panoramic Board (21:9 Native Multi-Column Layout) -->
+    <main class="panoramic-board">
+      
+      <!-- Section 1: Family Co-op Quest Hub (全家同心 · 一起做一起加积分) -->
+      <section class="coop-section">
+        <div class="section-header">
+          <div class="header-left">
+            <span class="section-icon">🤝</span>
+            <div class="header-titles">
+              <h2 class="section-title">家庭同心协作大厅 <span class="badge-highlight">做了一起加积分</span></h2>
+              <p class="section-desc">家长与孩子共同参与，协同达成家庭大事件，全员同步加分，共筑温馨自律好风气！</p>
+            </div>
+          </div>
+          <div class="header-right">
+            <button class="btn-sm btn-ghost" id="btn-quick-coop-info">💡 协作理念与规则</button>
+          </div>
+        </div>
+
+        <div class="coop-cards-grid" id="coop-cards-container">
+          <!-- Co-op cards dynamically rendered here -->
+        </div>
+      </section>
+
+      <!-- Section 2: Multi-Column Member Boards (爸爸、妈妈、大宝、二宝并排展开) -->
+      <section class="members-section">
+        <div class="members-grid" id="members-container">
+          <!-- Member Column Cards dynamically rendered here -->
+        </div>
+      </section>
+
+      <!-- Section 3: Bottom Panoramic Rail (Live Activity & Reward Store Preview) -->
+      <section class="bottom-rail">
+        <!-- Live Score Logs Feed -->
+        <div class="rail-card activity-feed-card">
+          <div class="rail-header">
+            <div class="rail-title"><span class="icon">📜</span> 实时积分与荣耀动态</div>
+            <span class="badge-sub" id="log-count-badge">最近记录</span>
+          </div>
+          <div class="activity-feed-list" id="activity-feed-list">
+            <!-- Dynamic Log Items -->
+          </div>
+        </div>
+
+        <!-- Family Wishes & Reward Showcase -->
+        <div class="rail-card rewards-showcase-card">
+          <div class="rail-header">
+            <div class="rail-title"><span class="icon">🎁</span> 心愿兑换商城</div>
+            <a href="./config.html#rewards" class="link-more">管理奖品 →</a>
+          </div>
+          <div class="rewards-showcase-grid" id="rewards-showcase-list">
+            <!-- Dynamic Reward Items -->
+          </div>
+        </div>
+      </section>
+
+    </main>
+
+    <footer class="footer-bar">
+      <div class="footer-left">
+        <span>🏡 HomeScore 21:9 超宽屏家庭协同系统</span>
+        <span class="sep">|</span>
+        <span>理念源自现代亲子游戏化激励与正向心理学</span>
+      </div>
+      <div class="footer-right">
+        <span id="data-status-text">🟢 后端持久化已连接</span>
+        <span class="sep">|</span>
+        <a href="./config.html" class="footer-link">配置人物/任务/心愿</a>
+      </div>
+    </footer>
+  </div>
+
+  <!-- Modal: Quick Score Adjustment -->
+  <div class="modal-backdrop" id="modal-adjust-score" style="display: none;">
+    <div class="modal-box">
+      <div class="modal-header">
+        <div class="modal-title" id="adjust-modal-title">为【大宝】快捷奖惩积分</div>
+        <button class="modal-close" onclick="closeAdjustModal()">✕</button>
+      </div>
+      <div class="modal-body">
+        <div class="member-preview-bar" id="adjust-member-preview">
+          <!-- Filled by JS -->
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">选择推荐好习惯 / 正向激励：</label>
+          <div class="tags-group" id="positive-tags-container">
+            <!-- Auto populated tags -->
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">纠偏引导 / 扣减提示（慎用）：</label>
+          <div class="tags-group" id="negative-tags-container">
+            <!-- Auto populated tags -->
+          </div>
+        </div>
+
+        <div class="form-row-custom">
+          <div class="form-group flex-1">
+            <label class="form-label">自定义分值 (+/-)：</label>
+            <input type="number" id="input-adjust-delta" class="form-input" placeholder="+10 或 -5" value="10">
+          </div>
+          <div class="form-group flex-2">
+            <label class="form-label">奖惩原因 / 闪光点记录：</label>
+            <input type="text" id="input-adjust-reason" class="form-input" placeholder="例如：今天主动帮忙扔垃圾">
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" onclick="closeAdjustModal()">取消</button>
+        <button class="btn btn-primary" id="btn-submit-adjust" onclick="submitAdjustScore()">确认并记入积分</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal: Co-op Check-in Confirmation -->
+  <div class="modal-backdrop" id="modal-coop-confirm" style="display: none;">
+    <div class="modal-box">
+      <div class="modal-header">
+        <div class="modal-title" id="coop-modal-title">🎉 全家齐心协作打卡</div>
+        <button class="modal-close" onclick="closeCoopModal()">✕</button>
+      </div>
+      <div class="modal-body">
+        <div class="coop-detail-box" id="coop-modal-detail">
+          <!-- Filled by JS -->
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">选择参与本次协作的家庭成员（默认全员）：</label>
+          <div class="participants-picker" id="coop-participants-list">
+            <!-- Checkbox chips for all members -->
+          </div>
+        </div>
+
+        <div class="coop-reward-tip">
+          🌟 点击确认后，所选成员将<strong>各自获得对应积分</strong>，并在荣誉墙广播！
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" onclick="closeCoopModal()">返回</button>
+        <button class="btn btn-success" id="btn-submit-coop" onclick="submitCoopComplete()">齐心达成，全员加分！</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal: Add New Task to Member (Quick from Dashboard) -->
+  <div class="modal-backdrop" id="modal-quick-task" style="display: none;">
+    <div class="modal-box">
+      <div class="modal-header">
+        <div class="modal-title" id="quick-task-title">为成员添加今日任务</div>
+        <button class="modal-close" onclick="closeQuickTaskModal()">✕</button>
+      </div>
+      <div class="modal-body">
+        <input type="hidden" id="quick-task-member-id">
+        <div class="form-group">
+          <label class="form-label">任务名称：</label>
+          <input type="text" id="quick-task-name" class="form-input" placeholder="例如：背诵一首古诗 / 整理床铺">
+        </div>
+        <div class="form-row">
+          <div class="form-group flex-1">
+            <label class="form-label">分类：</label>
+            <select id="quick-task-category" class="form-select">
+              <option value="学习自律">学习自律</option>
+              <option value="生活习惯">生活习惯</option>
+              <option value="家务分担">家务分担</option>
+              <option value="运动健康">运动健康</option>
+              <option value="品德情商">品德情商</option>
+              <option value="榜样自律">榜样自律</option>
+            </select>
+          </div>
+          <div class="form-group flex-1">
+            <label class="form-label">奖励分值：</label>
+            <input type="number" id="quick-task-points" class="form-input" value="10" min="1" max="100">
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" onclick="closeQuickTaskModal()">取消</button>
+        <button class="btn btn-primary" onclick="submitQuickTask()">添加任务</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Notification Container -->
+  <div class="toast-container" id="toast-container"></div>
+
+  <script src="./app.js"></script>
+</body>
+</html>

@@ -1,0 +1,397 @@
+{
+  "members": [
+    {
+      "id": "mem_dad",
+      "name": "爸爸",
+      "role": "家长 · 榜样",
+      "roleType": "parent",
+      "avatar": "👨‍💼",
+      "themeColor": "#3b82f6",
+      "score": 180,
+      "totalEarned": 350,
+      "level": 3,
+      "levelTitle": "超人老爸",
+      "wishTitle": "静音机械键盘",
+      "wishCost": 300,
+      "orderIndex": 1
+    },
+    {
+      "id": "mem_mom",
+      "name": "妈妈",
+      "role": "家长 · 温柔力量",
+      "roleType": "parent",
+      "avatar": "👩‍🏫",
+      "themeColor": "#ec4899",
+      "score": 210,
+      "totalEarned": 420,
+      "level": 4,
+      "levelTitle": "智慧女神",
+      "wishTitle": "周末水疗SPA",
+      "wishCost": 350,
+      "orderIndex": 2
+    },
+    {
+      "id": "mem_kid1",
+      "name": "大宝 (轩轩)",
+      "role": "哥哥 · 小学生",
+      "roleType": "kid",
+      "avatar": "👦",
+      "themeColor": "#10b981",
+      "score": 145,
+      "totalEarned": 290,
+      "level": 3,
+      "levelTitle": "自律小先锋",
+      "wishTitle": "乐高火星探测车",
+      "wishCost": 200,
+      "orderIndex": 3
+    },
+    {
+      "id": "mem_kid2",
+      "name": "二宝 (彤彤)",
+      "role": "妹妹 · 幼儿园",
+      "roleType": "kid",
+      "avatar": "👧",
+      "themeColor": "#f59e0b",
+      "score": 95,
+      "totalEarned": 180,
+      "level": 2,
+      "levelTitle": "快乐探索家",
+      "wishTitle": "迪士尼公主绘本全套",
+      "wishCost": 150,
+      "orderIndex": 4
+    }
+  ],
+  "tasks": [
+    {
+      "id": "t_dad_1",
+      "memberId": "mem_dad",
+      "title": "带孩子户外运动/锻炼30分钟",
+      "category": "运动健康",
+      "points": 15,
+      "frequency": "daily",
+      "completed": 0,
+      "completedAt": null
+    },
+    {
+      "id": "t_dad_2",
+      "memberId": "mem_dad",
+      "title": "辅导作业保持耐心温和不发火",
+      "category": "情绪自律",
+      "points": 10,
+      "frequency": "daily",
+      "completed": 0,
+      "completedAt": null
+    },
+    {
+      "id": "t_dad_3",
+      "memberId": "mem_dad",
+      "title": "准备一顿健康营养餐或主动洗碗",
+      "category": "家庭分担",
+      "points": 10,
+      "frequency": "daily",
+      "completed": 0,
+      "completedAt": null
+    },
+    {
+      "id": "t_mom_1",
+      "memberId": "mem_mom",
+      "title": "亲子高质量共读绘本20分钟",
+      "category": "习惯培养",
+      "points": 15,
+      "frequency": "daily",
+      "completed": 0,
+      "completedAt": null
+    },
+    {
+      "id": "t_mom_2",
+      "memberId": "mem_mom",
+      "title": "坚持晚间拉伸与个人阅读30分钟",
+      "category": "自律榜样",
+      "points": 10,
+      "frequency": "daily",
+      "completed": 0,
+      "completedAt": null
+    },
+    {
+      "id": "t_mom_3",
+      "memberId": "mem_mom",
+      "title": "记录今日家庭闪光时刻与赞美孩子",
+      "category": "正向鼓励",
+      "points": 10,
+      "frequency": "daily",
+      "completed": 0,
+      "completedAt": null
+    },
+    {
+      "id": "t_k1_1",
+      "memberId": "mem_kid1",
+      "title": "放学主动完成作业并自主检查",
+      "category": "学习自律",
+      "points": 15,
+      "frequency": "daily",
+      "completed": 0,
+      "completedAt": null
+    },
+    {
+      "id": "t_k1_2",
+      "memberId": "mem_kid1",
+      "title": "自主整理书包与保持书桌整洁",
+      "category": "生活卫生",
+      "points": 10,
+      "frequency": "daily",
+      "completed": 0,
+      "completedAt": null
+    },
+    {
+      "id": "t_k1_3",
+      "memberId": "mem_kid1",
+      "title": "课外阅读经典书籍30分钟",
+      "category": "阅读拓展",
+      "points": 10,
+      "frequency": "daily",
+      "completed": 0,
+      "completedAt": null
+    },
+    {
+      "id": "t_k1_4",
+      "memberId": "mem_kid1",
+      "title": "主动关爱妹妹，耐心分享玩具",
+      "category": "品德情商",
+      "points": 10,
+      "frequency": "daily",
+      "completed": 0,
+      "completedAt": null
+    },
+    {
+      "id": "t_k1_5",
+      "memberId": "mem_kid1",
+      "title": "晚上9:30前准时刷牙上床熄灯",
+      "category": "作息自理",
+      "points": 10,
+      "frequency": "daily",
+      "completed": 0,
+      "completedAt": null
+    },
+    {
+      "id": "t_k2_1",
+      "memberId": "mem_kid2",
+      "title": "玩完玩具后自己放回玩具箱",
+      "category": "生活自理",
+      "points": 10,
+      "frequency": "daily",
+      "completed": 0,
+      "completedAt": null
+    },
+    {
+      "id": "t_k2_2",
+      "memberId": "mem_kid2",
+      "title": "饭前主动洗手，吃饭不挑食吃光光",
+      "category": "健康生活",
+      "points": 10,
+      "frequency": "daily",
+      "completed": 0,
+      "completedAt": null
+    },
+    {
+      "id": "t_k2_3",
+      "memberId": "mem_kid2",
+      "title": "认真听妈妈读绘本并主动提问",
+      "category": "认知习惯",
+      "points": 10,
+      "frequency": "daily",
+      "completed": 0,
+      "completedAt": null
+    },
+    {
+      "id": "t_k2_4",
+      "memberId": "mem_kid2",
+      "title": "自己穿脱鞋袜与脱下的衣服折好",
+      "category": "独立动手",
+      "points": 10,
+      "frequency": "daily",
+      "completed": 0,
+      "completedAt": null
+    },
+    {
+      "id": "t_k2_5",
+      "memberId": "mem_kid2",
+      "title": "礼貌待人，常说“谢谢”和“请”",
+      "category": "品德礼貌",
+      "points": 5,
+      "frequency": "daily",
+      "completed": 0,
+      "completedAt": null
+    }
+  ],
+  "coopActivities": [
+    {
+      "id": "coop_1",
+      "title": "餐后全家总动员",
+      "description": "全家分工：一人收碗筷、一人擦桌子、一人扫地、一人洗碗，厨房与客厅一尘不染！",
+      "icon": "🍽️",
+      "pointsPerPerson": 15,
+      "tag": "家务协作",
+      "completedToday": 0,
+      "lastCompletedAt": null
+    },
+    {
+      "id": "coop_2",
+      "title": "亲子沉浸共读时光 (40分钟)",
+      "description": "全家放下手机与电子屏幕，围坐在沙发或书房，各自阅读或共同读一本好书。",
+      "icon": "📖",
+      "pointsPerPerson": 20,
+      "tag": "精神给养",
+      "completedToday": 0,
+      "lastCompletedAt": null
+    },
+    {
+      "id": "coop_3",
+      "title": "全家户外徒步/骑行/运动",
+      "description": "周末全家一起去公园散步徒步5公里、骑单车或打羽毛球，拥抱大自然与阳光。",
+      "icon": "🏃‍♂️",
+      "pointsPerPerson": 25,
+      "tag": "体能活力",
+      "completedToday": 0,
+      "lastCompletedAt": null
+    },
+    {
+      "id": "coop_4",
+      "title": "周末全家深层大扫除",
+      "description": "全家齐心协力打扫死角、整理衣橱与玩具区，让家焕然一新！",
+      "icon": "🧹",
+      "pointsPerPerson": 30,
+      "tag": "深度劳作",
+      "completedToday": 0,
+      "lastCompletedAt": null
+    },
+    {
+      "id": "coop_5",
+      "title": "全家烘焙/亲子大厨之夜",
+      "description": "全员协作制作一道家庭特色菜或美味烘焙甜点，共享劳动果实与欢声笑语。",
+      "icon": "🍳",
+      "pointsPerPerson": 20,
+      "tag": "亲子美食",
+      "completedToday": 0,
+      "lastCompletedAt": null
+    },
+    {
+      "id": "coop_6",
+      "title": "无屏幕客厅桌游之夜",
+      "description": "全家围坐玩大富翁、拼图、飞行棋或猜谜互动，享受纯粹的高质量亲情陪伴。",
+      "icon": "🎲",
+      "pointsPerPerson": 15,
+      "tag": "家庭联欢",
+      "completedToday": 0,
+      "lastCompletedAt": null
+    }
+  ],
+  "rewards": [
+    {
+      "id": "rew_1",
+      "memberId": "mem_kid1",
+      "title": "乐高火星探测车",
+      "cost": 200,
+      "icon": "🚀",
+      "category": "实物玩具",
+      "redeemedCount": 0
+    },
+    {
+      "id": "rew_2",
+      "memberId": "mem_kid1",
+      "title": "周末自主选择一次游乐园",
+      "cost": 120,
+      "icon": "🎡",
+      "category": "体验活动",
+      "redeemedCount": 0
+    },
+    {
+      "id": "rew_3",
+      "memberId": "mem_kid1",
+      "title": "额外自由看动画片/玩游戏30分钟",
+      "cost": 50,
+      "icon": "🎮",
+      "category": "特权奖励",
+      "redeemedCount": 1
+    },
+    {
+      "id": "rew_4",
+      "memberId": "mem_kid2",
+      "title": "迪士尼公主绘本全套",
+      "cost": 150,
+      "icon": "📚",
+      "category": "实物书籍",
+      "redeemedCount": 0
+    },
+    {
+      "id": "rew_5",
+      "memberId": "mem_kid2",
+      "title": "去动物园喂小动物一次",
+      "cost": 100,
+      "icon": "🦒",
+      "category": "体验活动",
+      "redeemedCount": 0
+    },
+    {
+      "id": "rew_6",
+      "memberId": "mem_kid2",
+      "title": "挑选一个喜爱的冰淇淋/甜点",
+      "cost": 40,
+      "icon": "🍦",
+      "category": "美食愿望",
+      "redeemedCount": 2
+    },
+    {
+      "id": "rew_7",
+      "memberId": "mem_dad",
+      "title": "静音机械键盘",
+      "cost": 300,
+      "icon": "⌨️",
+      "category": "数码心愿",
+      "redeemedCount": 0
+    },
+    {
+      "id": "rew_8",
+      "memberId": "mem_mom",
+      "title": "周末专属放松SPA与独处下午茶",
+      "cost": 350,
+      "icon": "☕",
+      "category": "生活享受",
+      "redeemedCount": 0
+    }
+  ],
+  "logs": [
+    {
+      "id": "log_seed_1",
+      "memberId": "mem_kid1",
+      "memberName": "大宝 (轩轩)",
+      "change": 15,
+      "reason": "完成任务：放学主动完成作业并自主检查",
+      "type": "task",
+      "timestamp": "2026-09-14T05:09:28.667Z"
+    },
+    {
+      "id": "log_seed_2",
+      "memberId": "mem_kid2",
+      "memberName": "二宝 (彤彤)",
+      "change": 10,
+      "reason": "完成任务：玩完玩具后自己放回玩具箱",
+      "type": "task",
+      "timestamp": "2026-09-14T05:39:28.667Z"
+    },
+    {
+      "id": "log_seed_3",
+      "memberId": "all",
+      "memberName": "全家战队",
+      "change": 15,
+      "reason": "【全家齐心协作】完成活动：餐后全家总动员，全员各+15分！",
+      "type": "coop",
+      "timestamp": "2026-09-14T06:09:28.667Z"
+    }
+  ],
+  "system": {
+    "familyName": "幸福二孩模范家",
+    "familyMotto": "全家同行 · 互助自律 · 快乐成长",
+    "lastRolloverDate": "2026-09-14",
+    "streakDays": 15
+  }
+}

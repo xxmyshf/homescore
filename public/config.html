@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>人物与家庭配置中心 · HomeScore</title>
+  <link rel="stylesheet" href="./style.css">
+  <link rel="stylesheet" href="./config.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&family=Noto+Sans+SC:wght@400;500;700;900&display=swap" rel="stylesheet">
+</head>
+<body class="theme-dark config-page">
+  <div class="config-container">
+    
+    <!-- Top Nav Bar with Prominent Back Link -->
+    <header class="config-nav">
+      <div class="nav-left">
+        <a href="./index.html" class="btn-back-board">
+          <span class="icon">←</span>
+          <span>返回 21:9 家庭指挥大屏看板</span>
+        </a>
+        <div class="config-header-title">
+          <h1>⚙️ 人物与家庭配置中心</h1>
+          <p>随时定制家庭成员、角色形象、专属习惯任务、协作大事件及心愿商城</p>
+        </div>
+      </div>
+      <div class="nav-right">
+        <button class="btn btn-secondary" onclick="exportDataBackup()">📥 导出数据备份</button>
+        <button class="btn btn-secondary" onclick="triggerImportBackup()">📤 导入数据恢复</button>
+        <button class="btn btn-danger-soft" onclick="resetDefaultsConfirm()">🔄 重置默认二孩家庭</button>
+        <input type="file" id="file-import" style="display:none;" accept=".json" onchange="handleFileImport(event)">
+      </div>
+    </header>
+
+    <!-- Sub Navigation Tabs -->
+    <div class="config-tabs-bar">
+      <button class="tab-btn active" onclick="switchTab('members')">👥 人物档案管理</button>
+      <button class="tab-btn" onclick="switchTab('tasks')">📋 专属任务配置</button>
+      <button class="tab-btn" onclick="switchTab('coop')">🤝 全家协作大任务</button>
+      <button class="tab-btn" onclick="switchTab('rewards')">🎁 心愿商城配置</button>
+    </div>
+
+    <!-- Tab 1: Member / Character Management -->
+    <section id="tab-members" class="tab-panel active">
+      <div class="panel-top-bar">
+        <div>
+          <h2>家庭人物角色档案</h2>
+          <p>支持自由增删与修改家庭成员（爸爸、妈妈、大宝、二宝、长辈等），定义专属身份、形象与成长目标。</p>
+        </div>
+        <button class="btn btn-primary" onclick="openMemberModal()">＋ 添加新家庭成员</button>
+      </div>
+
+      <div class="members-cards-container" id="members-list-grid">
+        <!-- Rendered by config.js -->
+      </div>
+    </section>
+
+    <!-- Tab 2: Custom Tasks Management -->
+    <section id="tab-tasks" class="tab-panel">
+      <div class="panel-top-bar">
+        <div>
+          <h2>各人物专属打卡任务配置</h2>
+          <p>根据孩子年龄阶段与家长榜样职责，灵活规划习惯、学习、劳作与品德任务。</p>
+        </div>
+        <div class="filter-controls">
+          <select id="filter-task-member" class="form-select" onchange="renderTasksList()">
+            <option value="all">所有成员任务</option>
+          </select>
+          <button class="btn btn-primary" onclick="openTaskModal()">＋ 添加新任务</button>
+        </div>
+      </div>
+
+      <div class="tasks-table-container">
+        <table class="config-table">
+          <thead>
+            <tr>
+              <th>归属人物</th>
+              <th>任务名称</th>
+              <th>分类</th>
+              <th>奖励分值</th>
+              <th>频次</th>
+              <th>操作</th>
+            </tr>
+          </thead>
+          <tbody id="tasks-table-body">
+            <!-- Rendered by config.js -->
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- Tab 3: Family Co-op Quests Management -->
+    <section id="tab-coop" class="tab-panel">
+      <div class="panel-top-bar">
+        <div>
+          <h2>家庭共同协作大任务 (做了一起加积分)</h2>
+          <p>规划全家共同参与的家务、阅读、运动与亲子时光，达成时全员同步加分，共筑温馨家风。</p>
+        </div>
+        <button class="btn btn-primary" onclick="openCoopModal()">＋ 添加全家协作活动</button>
+      </div>
+
+      <div class="coop-manage-grid" id="coop-manage-container">
+        <!-- Rendered by config.js -->
+      </div>
+    </section>
+
+    <!-- Tab 4: Rewards Management -->
+    <section id="tab-rewards" class="tab-panel">
+      <div class="panel-top-bar">
+        <div>
+          <h2>心愿商城与奖品库</h2>
+          <p>设立正向激励心愿目标，让孩子用日常自律积累的积分兑换心仪书籍、玩具或特权时光。</p>
+        </div>
+        <button class="btn btn-primary" onclick="openRewardModal()">＋ 添加心愿奖品</button>
+      </div>
+
+      <div class="rewards-manage-grid" id="rewards-manage-container">
+        <!-- Rendered by config.js -->
+      </div>
+    </section>
+
+  </div>
+
+  <!-- Modal: Add / Edit Member -->
+  <div class="modal-backdrop" id="modal-member" style="display: none;">
+    <div class="modal-box">
+      <div class="modal-header">
+        <div class="modal-title" id="member-modal-title">添加新家庭成员</div>
+        <button class="modal-close" onclick="closeMemberModal()">✕</button>
+      </div>
+      <div class="modal-body">
+        <input type="hidden" id="edit-member-id">
+        <div class="form-row-custom">
+          <div class="form-group flex-2">
+            <label class="form-label">人物称谓/姓名：</label>
+            <input type="text" id="member-input-name" class="form-input" placeholder="例如：大宝、小美、爸爸">
+          </div>
+          <div class="form-group flex-1">
+            <label class="form-label">角色分类：</label>
+            <select id="member-input-roleType" class="form-select">
+              <option value="kid">孩子 (宝贝)</option>
+              <option value="parent">家长 (榜样)</option>
+              <option value="elder">长辈 (长辈)</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">角色标签描述：</label>
+          <input type="text" id="member-input-role" class="form-input" placeholder="例如：哥哥 · 小学生 / 妹妹 · 幼儿园 / 家长 · 榜样">
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">选择人物头像：</label>
+          <div class="avatar-picker-grid" id="avatar-picker-container">
+            <!-- Populated with avatars -->
+          </div>
+          <input type="hidden" id="member-input-avatar" value="👦">
+        </div>
+
+        <div class="form-row-custom">
+          <div class="form-group flex-1">
+            <label class="form-label">可用积分：</label>
+            <input type="number" id="member-input-score" class="form-input" value="100">
+          </div>
+          <div class="form-group flex-1">
+            <label class="form-label">累计总积分：</label>
+            <input type="number" id="member-input-totalEarned" class="form-input" value="100">
+          </div>
+          <div class="form-group flex-1">
+            <label class="form-label">成长称号：</label>
+            <input type="text" id="member-input-levelTitle" class="form-input" value="自律小先锋">
+          </div>
+        </div>
+
+        <div class="form-row-custom">
+          <div class="form-group flex-2">
+            <label class="form-label">专属心愿目标：</label>
+            <input type="text" id="member-input-wishTitle" class="form-input" placeholder="例如：乐高积木一套">
+          </div>
+          <div class="form-group flex-1">
+            <label class="form-label">心愿所需积分：</label>
+            <input type="number" id="member-input-wishCost" class="form-input" value="150">
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">主题标识色：</label>
+          <div class="color-picker-row" id="color-picker-container">
+            <!-- Populated by JS -->
+          </div>
+          <input type="hidden" id="member-input-color" value="#3b82f6">
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" onclick="closeMemberModal()">取消</button>
+        <button class="btn btn-primary" onclick="submitMemberForm()">保存人物档案</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal: Add / Edit Task -->
+  <div class="modal-backdrop" id="modal-task" style="display: none;">
+    <div class="modal-box">
+      <div class="modal-header">
+        <div class="modal-title" id="task-modal-title">添加专属打卡任务</div>
+        <button class="modal-close" onclick="closeTaskModal()">✕</button>
+      </div>
+      <div class="modal-body">
+        <input type="hidden" id="edit-task-id">
+        <div class="form-group">
+          <label class="form-label">指派给人物：</label>
+          <select id="task-input-member" class="form-select">
+            <!-- Filled with members -->
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">任务名称：</label>
+          <input type="text" id="task-input-title" class="form-input" placeholder="例如：放学自主整理书包与保持书桌整洁">
+        </div>
+        <div class="form-row-custom">
+          <div class="form-group flex-1">
+            <label class="form-label">任务分类：</label>
+            <select id="task-input-category" class="form-select">
+              <option value="学习自律">学习自律</option>
+              <option value="生活自理">生活自理</option>
+              <option value="家务分担">家务分担</option>
+              <option value="健康运动">健康运动</option>
+              <option value="品德礼貌">品德礼貌</option>
+              <option value="习惯培养">习惯培养</option>
+              <option value="情绪榜样">情绪榜样</option>
+            </select>
+          </div>
+          <div class="form-group flex-1">
+            <label class="form-label">完成奖励积分：</label>
+            <input type="number" id="task-input-points" class="form-input" value="10">
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" onclick="closeTaskModal()">取消</button>
+        <button class="btn btn-primary" onclick="submitTaskForm()">保存任务</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal: Add / Edit Co-op Activity -->
+  <div class="modal-backdrop" id="modal-coop-config" style="display: none;">
+    <div class="modal-box">
+      <div class="modal-header">
+        <div class="modal-title" id="coop-modal-config-title">配置全家协作活动</div>
+        <button class="modal-close" onclick="closeCoopConfigModal()">✕</button>
+      </div>
+      <div class="modal-body">
+        <input type="hidden" id="edit-coop-id">
+        <div class="form-row-custom">
+          <div class="form-group flex-2">
+            <label class="form-label">协作大事件标题：</label>
+            <input type="text" id="coop-input-title" class="form-input" placeholder="例如：全家周末公园徒步5公里">
+          </div>
+          <div class="form-group flex-1">
+            <label class="form-label">代表图标：</label>
+            <input type="text" id="coop-input-icon" class="form-input" value="🏃‍♂️" placeholder="Emoji">
+          </div>
+        </div>
+        <div class="form-row-custom">
+          <div class="form-group flex-1">
+            <label class="form-label">协作标签：</label>
+            <input type="text" id="coop-input-tag" class="form-input" value="全家同行" placeholder="例如：家务协作 / 亲子运动">
+          </div>
+          <div class="form-group flex-1">
+            <label class="form-label">每人奖励积分：</label>
+            <input type="number" id="coop-input-points" class="form-input" value="20">
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">协作内容与分工说明：</label>
+          <textarea id="coop-input-desc" class="form-input" rows="3" placeholder="例如：全家分工合作，一人收碗一人洗碗，让客厅与厨房一尘不染"></textarea>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" onclick="closeCoopConfigModal()">取消</button>
+        <button class="btn btn-primary" onclick="submitCoopConfigForm()">保存协作活动</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal: Add Reward -->
+  <div class="modal-backdrop" id="modal-reward-config" style="display: none;">
+    <div class="modal-box">
+      <div class="modal-header">
+        <div class="modal-title">添加心愿奖品</div>
+        <button class="modal-close" onclick="closeRewardModal()">✕</button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label class="form-label">奖品归属（可指派专属成员或全员）：</label>
+          <select id="reward-input-member" class="form-select">
+            <option value="">全家通用奖品</option>
+          </select>
+        </div>
+        <div class="form-row-custom">
+          <div class="form-group flex-2">
+            <label class="form-label">奖品/心愿名称：</label>
+            <input type="text" id="reward-input-title" class="form-input" placeholder="例如：迪士尼门票 / 乐高积木 / 额外游戏30分钟">
+          </div>
+          <div class="form-group flex-1">
+            <label class="form-label">图标：</label>
+            <input type="text" id="reward-input-icon" class="form-input" value="🎁">
+          </div>
+        </div>
+        <div class="form-row-custom">
+          <div class="form-group flex-1">
+            <label class="form-label">分类：</label>
+            <select id="reward-input-category" class="form-select">
+              <option value="实物玩具">实物玩具</option>
+              <option value="体验活动">体验活动</option>
+              <option value="特权时光">特权时光</option>
+              <option value="书籍文具">书籍文具</option>
+              <option value="美食愿望">美食愿望</option>
+            </select>
+          </div>
+          <div class="form-group flex-1">
+            <label class="form-label">兑换所需积分：</label>
+            <input type="number" id="reward-input-cost" class="form-input" value="100">
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" onclick="closeRewardModal()">取消</button>
+        <button class="btn btn-primary" onclick="submitRewardForm()">添加奖品</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="toast-container" id="toast-container"></div>
+
+  <script src="./config.js"></script>
+</body>
+</html>
