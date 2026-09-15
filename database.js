@@ -214,7 +214,7 @@ class Database {
       rewards: [],
       logs: [],
       system: {
-        familyName: '幸福四口之家',
+        familyName: '家庭积分奖励',
         familyMotto: '自律有爱，齐心同行，做更好的自己！',
         lastRolloverDate: new Date().toISOString().split('T')[0],
         streakDays: 12
@@ -363,7 +363,7 @@ class Database {
     this.state.rewards = JSON.parse(JSON.stringify(DEFAULT_REWARDS));
     this.state.logs = JSON.parse(JSON.stringify(DEFAULT_LOGS));
     this.state.system = {
-      familyName: '幸福二孩模范家',
+      familyName: '家庭积分奖励',
       familyMotto: '全家同行 · 互助自律 · 快乐成长',
       lastRolloverDate: new Date().toISOString().split('T')[0],
       streakDays: 15

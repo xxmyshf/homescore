@@ -576,13 +576,13 @@ async function handleFileImport(e) {
 }
 
 async function resetDefaultsConfirm() {
-  if (!confirm('⚠️ 警告：确认要重置为默认的二孩家庭示例数据吗？当前所有自定义修改将被重置。')) return;
+  if (!confirm('⚠️ 警告：确认要重置为默认的示例数据吗？当前所有自定义修改将被重置。')) return;
 
   try {
     const res = await fetch('/api/reset-defaults', { method: 'POST' });
     const json = await res.json();
     if (json.success) {
-      showToast('🔄 已重置为默认二孩家庭数据');
+      showToast('🔄 已重置为默认家庭数据');
       loadConfigState();
     }
   } catch (err) {

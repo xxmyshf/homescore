@@ -361,13 +361,13 @@
   ],
   "logs": [
     {
-      "id": "log_seed_1",
-      "memberId": "mem_kid1",
-      "memberName": "大宝 (轩轩)",
+      "id": "log_seed_3",
+      "memberId": "all",
+      "memberName": "全家战队",
       "change": 15,
-      "reason": "完成任务：放学主动完成作业并自主检查",
-      "type": "task",
-      "timestamp": "2026-09-14T05:09:28.667Z"
+      "reason": "【全家齐心协作】完成活动：餐后全家总动员，全员各+15分！",
+      "type": "coop",
+      "timestamp": "2026-09-14T06:09:28.667Z"
     },
     {
       "id": "log_seed_2",
@@ -379,19 +379,19 @@
       "timestamp": "2026-09-14T05:39:28.667Z"
     },
     {
-      "id": "log_seed_3",
-      "memberId": "all",
-      "memberName": "全家战队",
+      "id": "log_seed_1",
+      "memberId": "mem_kid1",
+      "memberName": "大宝 (轩轩)",
       "change": 15,
-      "reason": "【全家齐心协作】完成活动：餐后全家总动员，全员各+15分！",
-      "type": "coop",
-      "timestamp": "2026-09-14T06:09:28.667Z"
+      "reason": "完成任务：放学主动完成作业并自主检查",
+      "type": "task",
+      "timestamp": "2026-09-14T05:09:28.667Z"
     }
   ],
   "system": {
-    "familyName": "幸福二孩模范家",
+    "familyName": "家庭积分奖励",
     "familyMotto": "全家同行 · 互助自律 · 快乐成长",
-    "lastRolloverDate": "2026-09-14",
-    "streakDays": 15
+    "lastRolloverDate": "2026-09-15",
+    "streakDays": 16
   }
 }
