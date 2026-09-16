@@ -52,9 +52,6 @@
 
 # 方式二：启动本地静态服务器（推荐）
 npx serve .
-# 或
-python3 -m http.server 8080
-# 然后访问 http://localhost:8080
 ```
 
 > 无需 `npm install`，无需任何后端服务，纯静态文件即跑即用。

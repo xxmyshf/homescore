@@ -116,6 +116,7 @@ const NEGATIVE_HABITS = [
 // --- Initialization ---
 document.addEventListener('DOMContentLoaded', () => {
   initClock();
+  initLayoutMode();
   setupEventListeners();
   loadState();
   // 数据存于浏览器 localStorage：无需轮询服务器。
@@ -125,6 +126,66 @@ document.addEventListener('DOMContentLoaded', () => {
   // 本地存储写入失败（隐私模式/配额超限）时弹出醒目提示
   window.addEventListener('homescore:storageerror', (e) => showToast(e.detail || '⚠️ 本地存储写入失败'));
 });
+
+function initLayoutMode() {
+  const savedMode = localStorage.getItem('homescore_layout_mode');
+  const isUltraWideScreen = (window.innerWidth / window.innerHeight) >= 1.85 || window.innerWidth >= 2000;
+  
+  if (savedMode === 'standard') {
+    setLayoutMode(false, false);
+  } else if (savedMode === 'ultrawide' || isUltraWideScreen) {
+    setLayoutMode(true, false);
+  }
+
+  const toggleBtn = document.getElementById('btn-toggle-ultrawide');
+  if (toggleBtn) {
+    toggleBtn.addEventListener('click', () => {
+      const isCurrentlyUltrawide = document.body.classList.contains('mode-ultrawide') || 
+        (!document.body.classList.contains('mode-standard') && ((window.innerWidth / window.innerHeight) >= 1.85 || window.innerWidth >= 2000));
+      const newMode = !isCurrentlyUltrawide;
+      setLayoutMode(newMode, true);
+    });
+  }
+
+  window.addEventListener('resize', () => {
+    const userPref = localStorage.getItem('homescore_layout_mode');
+    if (!userPref) {
+      const wide = (window.innerWidth / window.innerHeight) >= 1.85 || window.innerWidth >= 2000;
+      updateBadgeUI(wide);
+    }
+  });
+}
+
+function setLayoutMode(isUltrawide, saveToStorage = true) {
+  if (isUltrawide) {
+    document.body.classList.add('mode-ultrawide');
+    document.body.classList.remove('mode-standard');
+    if (saveToStorage) localStorage.setItem('homescore_layout_mode', 'ultrawide');
+  } else {
+    document.body.classList.add('mode-standard');
+    document.body.classList.remove('mode-ultrawide');
+    if (saveToStorage) localStorage.setItem('homescore_layout_mode', 'standard');
+  }
+  updateBadgeUI(isUltrawide);
+  if (saveToStorage) {
+    showToast(isUltrawide ? '🖥️ 已启用：21:9 免滚动宽屏指挥舱' : '📜 已切换为：标准流式看板');
+  }
+}
+
+function updateBadgeUI(isUltrawide) {
+  const badgeText = document.getElementById('badge-mode-text');
+  const badgeBtn = document.getElementById('btn-toggle-ultrawide');
+  if (badgeText) {
+    badgeText.textContent = isUltrawide ? '21:9 宽屏指挥舱 (免滚动)' : '标准流式看板';
+  }
+  if (badgeBtn) {
+    if (isUltrawide) {
+      badgeBtn.classList.add('active');
+    } else {
+      badgeBtn.classList.remove('active');
+    }
+  }
+}
 
 function initClock() {
   const clockEl = document.getElementById('current-clock');
@@ -357,7 +418,7 @@ function renderActivityFeed() {
     return;
   }
 
-  logs.slice(0, 15).forEach(log => {
+  logs.slice(0, 25).forEach(log => {
     const isPos = log.change >= 0;
     const timeStr = new Date(log.timestamp).toLocaleTimeString('zh-CN', { hour: '2-digit', minute: '2-digit' });
     const item = document.createElement('div');
@@ -382,7 +443,7 @@ function renderRewardsShowcase() {
   container.innerHTML = '';
 
   const rewards = appState.rewards || [];
-  rewards.slice(0, 6).forEach(rew => {
+  rewards.forEach(rew => {
     const member = appState.members.find(m => m.id === rew.memberId);
     const memberName = member ? member.name : '全员可用';
 
