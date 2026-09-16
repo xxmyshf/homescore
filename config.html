@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>人物与家庭配置中心 · HomeScore</title>
+  <title>人物与家庭配置中心 · 家庭积分奖励（本地版）</title>
   <link rel="stylesheet" href="./style.css">
   <link rel="stylesheet" href="./config.css">
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -32,6 +32,15 @@
         <input type="file" id="file-import" style="display:none;" accept=".json" onchange="handleFileImport(event)">
       </div>
     </header>
+
+    <!-- 纯前端提示条：数据仅保存在本机浏览器 -->
+    <div class="local-only-banner">
+      <span class="local-only-icon">🔒</span>
+      <span class="local-only-text">
+        <strong>纯本地运行版：</strong>数据仅保存在<b>当前这台设备的浏览器</b>中，不上传服务器。
+        请务必定期点击右上角 <b>「导出数据备份」</b>，以免清除浏览器缓存后丢失。
+      </span>
+    </div>
 
     <!-- Sub Navigation Tabs -->
     <div class="config-tabs-bar">
@@ -336,6 +345,7 @@
 
   <div class="toast-container" id="toast-container"></div>
 
+  <script src="./store.js"></script>
   <script src="./config.js"></script>
 </body>
 </html>

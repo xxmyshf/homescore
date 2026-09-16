@@ -17,6 +17,8 @@ const THEME_COLORS = [
 document.addEventListener('DOMContentLoaded', () => {
   initPickers();
   loadConfigState();
+  // 本地存储写入失败（隐私模式/配额超限）时弹出醒目提示
+  window.addEventListener('homescore:storageerror', (e) => showToast(e.detail || '⚠️ 本地存储写入失败'));
 });
 
 function initPickers() {
@@ -69,7 +71,7 @@ function switchTab(tabName) {
 
 async function loadConfigState() {
   try {
-    const res = await fetch('/api/state');
+    const res = await HS.localFetch('/api/state');
     const json = await res.json();
     if (json.success && json.data) {
       configState = json.data;
@@ -222,7 +224,7 @@ async function submitMemberForm() {
   try {
     const url = id ? `/api/members/${id}` : '/api/members';
     const method = id ? 'PUT' : 'POST';
-    const res = await fetch(url, {
+    const res = await HS.localFetch(url, {
       method,
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(payload)
@@ -244,7 +246,7 @@ async function deleteMember(id, name) {
   if (!confirm(`确定删除人物【${name}】吗？该人物的所有专属任务和心愿也将同步移除。`)) return;
 
   try {
-    const res = await fetch(`/api/members/${id}`, { method: 'DELETE' });
+    const res = await HS.localFetch(`/api/members/${id}`, { method: 'DELETE' });
     const json = await res.json();
     if (json.success) {
       showToast(`🗑️ 已删除人物：${name}`);
@@ -333,7 +335,7 @@ async function submitTaskForm() {
   try {
     const url = id ? `/api/tasks/${id}` : '/api/tasks';
     const method = id ? 'PUT' : 'POST';
-    const res = await fetch(url, {
+    const res = await HS.localFetch(url, {
       method,
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(payload)
@@ -354,7 +356,7 @@ async function submitTaskForm() {
 async function deleteTask(id) {
   if (!confirm('确认删除该任务吗？')) return;
   try {
-    const res = await fetch(`/api/tasks/${id}`, { method: 'DELETE' });
+    const res = await HS.localFetch(`/api/tasks/${id}`, { method: 'DELETE' });
     const json = await res.json();
     if (json.success) {
       showToast('🗑️ 任务已删除');
@@ -436,7 +438,7 @@ async function submitCoopConfigForm() {
   try {
     const url = id ? `/api/coop/${id}` : '/api/coop';
     const method = id ? 'PUT' : 'POST';
-    const res = await fetch(url, {
+    const res = await HS.localFetch(url, {
       method,
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(payload)
@@ -455,7 +457,7 @@ async function submitCoopConfigForm() {
 async function deleteCoop(id) {
   if (!confirm('确认删除该全家协作活动吗？')) return;
   try {
-    await fetch(`/api/coop/${id}`, { method: 'DELETE' });
+    await HS.localFetch(`/api/coop/${id}`, { method: 'DELETE' });
     showToast('🗑️ 已删除协作活动');
     loadConfigState();
   } catch (err) {
@@ -512,7 +514,7 @@ async function submitRewardForm() {
   }
 
   try {
-    const res = await fetch('/api/rewards', {
+    const res = await HS.localFetch('/api/rewards', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ memberId, title, icon, category, cost })
@@ -531,7 +533,7 @@ async function submitRewardForm() {
 async function deleteReward(id) {
   if (!confirm('确认删除该心愿奖品吗？')) return;
   try {
-    await fetch(`/api/rewards/${id}`, { method: 'DELETE' });
+    await HS.localFetch(`/api/rewards/${id}`, { method: 'DELETE' });
     showToast('🗑️ 已删除奖品');
     loadConfigState();
   } catch (err) {
@@ -541,7 +543,9 @@ async function deleteReward(id) {
 
 // 6. Data Backup & Reset
 function exportDataBackup() {
-  window.location.href = '/api/backup/export';
+  // 纯前端：直接在浏览器内把 localStorage 数据打包成 JSON 文件下载
+  HS.downloadBackup();
+  showToast('📥 已导出本地数据备份（JSON 文件），请妥善保存');
 }
 
 function triggerImportBackup() {
@@ -556,7 +560,7 @@ async function handleFileImport(e) {
   reader.onload = async (evt) => {
     try {
       const parsed = JSON.parse(evt.target.result);
-      const res = await fetch('/api/backup/import', {
+      const res = await HS.localFetch('/api/backup/import', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(parsed)
@@ -579,7 +583,7 @@ async function resetDefaultsConfirm() {
   if (!confirm('⚠️ 警告：确认要重置为默认的示例数据吗？当前所有自定义修改将被重置。')) return;
 
   try {
-    const res = await fetch('/api/reset-defaults', { method: 'POST' });
+    const res = await HS.localFetch('/api/reset-defaults', { method: 'POST' });
     const json = await res.json();
     if (json.success) {
       showToast('🔄 已重置为默认家庭数据');

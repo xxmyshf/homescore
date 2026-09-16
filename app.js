@@ -118,8 +118,12 @@ document.addEventListener('DOMContentLoaded', () => {
   initClock();
   setupEventListeners();
   loadState();
-  // Poll state every 10 seconds for multi-device sync
-  setInterval(loadState, 10000);
+  // 数据存于浏览器 localStorage：无需轮询服务器。
+  // 通过 homescore:change 事件实现同浏览器多标签页（看板/配置页）实时同步。
+  window.addEventListener('homescore:change', loadState);
+  window.addEventListener('storage', loadState);
+  // 本地存储写入失败（隐私模式/配额超限）时弹出醒目提示
+  window.addEventListener('homescore:storageerror', (e) => showToast(e.detail || '⚠️ 本地存储写入失败'));
 });
 
 function initClock() {
@@ -167,7 +171,7 @@ function setupEventListeners() {
 // --- Fetch & Render State ---
 async function loadState() {
   try {
-    const res = await fetch('/api/state');
+    const res = await HS.localFetch('/api/state');
     const json = await res.json();
     if (json.success && json.data) {
       appState = json.data;
@@ -401,7 +405,7 @@ function renderRewardsShowcase() {
 // 1. Task Toggle
 async function toggleTask(taskId) {
   try {
-    const res = await fetch(`/api/tasks/${taskId}/toggle`, { method: 'POST' });
+    const res = await HS.localFetch(`/api/tasks/${taskId}/toggle`, { method: 'POST' });
     const json = await res.json();
     if (json.success) {
       const isCompleted = json.data.task.completed;
@@ -424,7 +428,7 @@ async function toggleTask(taskId) {
 // 2. Quick Score Adjust (+/-)
 async function quickAdjust(memberId, delta, reason) {
   try {
-    const res = await fetch(`/api/members/${memberId}/adjust-score`, {
+    const res = await HS.localFetch(`/api/members/${memberId}/adjust-score`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ delta, reason })
@@ -576,7 +580,7 @@ async function submitCoopComplete() {
   }
 
   try {
-    const res = await fetch(`/api/coop/${currentCoopActivityId}/complete`, {
+    const res = await HS.localFetch(`/api/coop/${currentCoopActivityId}/complete`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ participantIds: selectedParticipants })
@@ -623,7 +627,7 @@ async function redeemRewardFromList(rewardId) {
   }
 
   try {
-    const res = await fetch(`/api/rewards/${rewardId}/redeem`, {
+    const res = await HS.localFetch(`/api/rewards/${rewardId}/redeem`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ memberId })
@@ -667,7 +671,7 @@ async function submitQuickTask() {
   }
 
   try {
-    const res = await fetch('/api/tasks', {
+    const res = await HS.localFetch('/api/tasks', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ memberId, title, category, points })

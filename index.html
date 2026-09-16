@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>HomeScore 21:9 · 全家协同积分与成长看板</title>
+  <title>家庭积分奖励 · 本地版（数据仅存于浏览器，请定期导出备份）</title>
   <link rel="stylesheet" href="./style.css">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -15,6 +15,15 @@
   <!-- Audio Context & Tone Synthesizer will be initialized in app.js -->
 
   <div class="screen-container">
+    <!-- 纯前端提示条：数据仅保存在本机浏览器 -->
+    <div class="local-only-banner">
+      <span class="local-only-icon">🔒</span>
+      <span class="local-only-text">
+        <strong>纯本地运行版：</strong>所有积分、任务与心愿数据仅保存在<b>当前这台设备的浏览器</b>中，不上传到任何服务器。
+        更换设备、换浏览器或清除浏览器数据都会导致数据丢失，请务必定期
+        <a href="./config.html" class="local-only-link">导出备份</a>。
+      </span>
+    </div>
     <!-- Top Header: Command Bar -->
     <header class="top-nav">
       <div class="nav-left">
@@ -125,14 +134,14 @@
 
     <footer class="footer-bar">
       <div class="footer-left">
-        <span>🏡 HomeScore 21:9 超宽屏家庭协同系统</span>
+        <span>🏡 家庭积分奖励 · 21:9 超宽屏家庭协同系统</span>
         <span class="sep">|</span>
         <span>理念源自现代亲子游戏化激励与正向心理学</span>
       </div>
       <div class="footer-right">
-        <span id="data-status-text">🟢 后端持久化已连接</span>
+        <span id="data-status-text">🔒 数据仅存于本机浏览器</span>
         <span class="sep">|</span>
-        <a href="./config.html" class="footer-link">配置人物/任务/心愿</a>
+        <a href="./config.html" class="footer-link">导出备份 / 配置</a>
       </div>
     </footer>
   </div>
@@ -252,6 +261,7 @@
   <!-- Toast Notification Container -->
   <div class="toast-container" id="toast-container"></div>
 
+  <script src="./store.js"></script>
   <script src="./app.js"></script>
 </body>
 </html>

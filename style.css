@@ -1314,3 +1314,41 @@ body {
 ::-webkit-scrollbar-thumb:hover {
   background: rgba(255, 255, 255, 0.25);
 }
+
+/* ===== 纯本地运行提示条 ===== */
+.local-only-banner {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: linear-gradient(135deg, rgba(245, 158, 11, 0.14) 0%, rgba(217, 119, 6, 0.08) 100%);
+  border: 1px solid rgba(245, 158, 11, 0.35);
+  border-radius: var(--radius-md);
+  padding: 10px 16px;
+  margin-bottom: 14px;
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--text-secondary);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.18);
+}
+.local-only-icon {
+  font-size: 18px;
+  flex-shrink: 0;
+}
+.local-only-text strong {
+  color: var(--accent-amber);
+  font-weight: 700;
+}
+.local-only-text b {
+  color: var(--text-primary);
+  font-weight: 700;
+}
+.local-only-link {
+  color: var(--accent-amber);
+  font-weight: 700;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  cursor: pointer;
+}
+.local-only-link:hover {
+  color: #fbbf24;
+}
