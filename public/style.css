@@ -18,7 +18,7 @@
   --accent-purple: #8b5cf6;
   --accent-amber: #f59e0b;
 
-  --font-main: 'Plus Jakarta Sans', 'Noto Sans SC', system-ui, -apple-system, sans-serif;
+  --font-main: 'Plus Jakarta Sans', 'Noto Sans SC', 'Noto Sans CJK SC', system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji";
   --radius-lg: 16px;
   --radius-md: 12px;
   --radius-sm: 8px;
@@ -1313,4 +1313,733 @@ body {
 
 ::-webkit-scrollbar-thumb:hover {
   background: rgba(255, 255, 255, 0.25);
+}
+
+/* ============================================================
+   21:9 Ultra-Wide Panoramic Cockpit Layout (No-Scroll Viewport)
+   ============================================================ */
+
+/* Base badge button styling */
+button.ultra-badge {
+  font-family: inherit;
+  cursor: pointer;
+  border: 1px solid rgba(99, 102, 241, 0.4);
+  background: rgba(99, 102, 241, 0.18);
+  color: #a5b4fc;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 4px 10px;
+  border-radius: 20px;
+  letter-spacing: 0.03em;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: var(--transition);
+}
+
+button.ultra-badge:hover {
+  background: rgba(99, 102, 241, 0.32);
+  border-color: rgba(99, 102, 241, 0.6);
+  color: #ffffff;
+  transform: translateY(-1px);
+}
+
+button.ultra-badge.active {
+  background: linear-gradient(135deg, rgba(99, 102, 241, 0.35), rgba(139, 92, 246, 0.35));
+  border-color: #818cf8;
+  color: #ffffff;
+  box-shadow: 0 0 12px rgba(99, 102, 241, 0.35);
+}
+
+@media (min-aspect-ratio: 1.85/1), (min-width: 2000px) {
+  html:not(.mode-standard),
+  body:not(.mode-standard) {
+    height: 100% !important;
+    overflow: hidden !important;
+  }
+
+  body:not(.mode-standard) .screen-container {
+    height: 100vh !important;
+    max-height: 100vh !important;
+    overflow: hidden !important;
+    padding: 8px 14px 6px 14px !important;
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 8px !important;
+    box-sizing: border-box !important;
+  }
+
+  /* 1. Header (Compact Command Bar) */
+  body:not(.mode-standard) .top-nav {
+    padding: 5px 14px !important;
+    margin-bottom: 0 !important;
+    height: 44px !important;
+    flex-shrink: 0 !important;
+    gap: 10px !important;
+    border-radius: var(--radius-md) !important;
+  }
+
+  body:not(.mode-standard) .brand-logo {
+    gap: 8px !important;
+  }
+
+  body:not(.mode-standard) .logo-icon {
+    font-size: 22px !important;
+  }
+
+  body:not(.mode-standard) .brand-title {
+    font-size: 15px !important;
+  }
+
+  body:not(.mode-standard) .brand-sub {
+    font-size: 11px !important;
+  }
+
+  body:not(.mode-standard) .nav-center {
+    gap: 8px !important;
+  }
+
+  body:not(.mode-standard) .stat-pill {
+    padding: 3px 10px !important;
+    font-size: 12px !important;
+    gap: 6px !important;
+  }
+
+  body:not(.mode-standard) .pill-icon {
+    font-size: 14px !important;
+  }
+
+  body:not(.mode-standard) .current-time-pill {
+    padding: 3px 10px !important;
+    font-size: 12px !important;
+  }
+
+  body:not(.mode-standard) .nav-right {
+    gap: 8px !important;
+  }
+
+  body:not(.mode-standard) .nav-btn {
+    padding: 4px 10px !important;
+    font-size: 12px !important;
+    gap: 4px !important;
+  }
+
+  /* 2. Panoramic Board: 2-Column Ultrawide Cockpit Grid */
+  body:not(.mode-standard) .panoramic-board {
+    flex: 1 !important;
+    min-height: 0 !important;
+    display: grid !important;
+    grid-template-columns: minmax(0, 1fr) minmax(360px, 24.5vw) !important;
+    grid-template-rows: auto minmax(0, 1fr) !important;
+    grid-template-areas:
+      "coop coop"
+      "members rail" !important;
+    gap: 8px !important;
+  }
+
+  /* 3. Co-op Hub (Full width sleek horizontal bar across top) */
+  body:not(.mode-standard) .coop-section {
+    grid-area: coop !important;
+    flex-shrink: 0 !important;
+    padding: 6px 12px !important;
+    border-radius: var(--radius-md) !important;
+  }
+
+  body:not(.mode-standard) .section-header {
+    margin-bottom: 4px !important;
+  }
+
+  body:not(.mode-standard) .header-left {
+    gap: 8px !important;
+  }
+
+  body:not(.mode-standard) .section-icon {
+    font-size: 16px !important;
+    padding: 3px !important;
+  }
+
+  body:not(.mode-standard) .section-title {
+    font-size: 13px !important;
+    gap: 6px !important;
+  }
+
+  body:not(.mode-standard) .badge-highlight {
+    font-size: 10px !important;
+    padding: 1px 5px !important;
+  }
+
+  body:not(.mode-standard) .section-desc {
+    font-size: 11px !important;
+    margin-top: 0 !important;
+  }
+
+  body:not(.mode-standard) .coop-cards-grid {
+    display: grid !important;
+    grid-template-columns: repeat(6, 1fr) !important;
+    gap: 6px !important;
+  }
+
+  body:not(.mode-standard) .coop-card {
+    padding: 5px 8px !important;
+    gap: 3px !important;
+    border-radius: var(--radius-sm) !important;
+  }
+
+  body:not(.mode-standard) .coop-card-top {
+    gap: 6px !important;
+    align-items: center !important;
+  }
+
+  body:not(.mode-standard) .coop-icon {
+    font-size: 20px !important;
+  }
+
+  body:not(.mode-standard) .coop-info {
+    min-width: 0 !important;
+  }
+
+  body:not(.mode-standard) .coop-title {
+    font-size: 11px !important;
+    margin-bottom: 1px !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+  }
+
+  body:not(.mode-standard) .coop-tag {
+    font-size: 9px !important;
+    padding: 0 4px !important;
+  }
+
+  body:not(.mode-standard) .coop-desc {
+    font-size: 10px !important;
+    color: var(--text-muted) !important;
+    margin-top: 1px !important;
+    line-height: 1.2 !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    display: block !important;
+    -webkit-line-clamp: unset !important;
+  }
+
+  body:not(.mode-standard) .coop-card-bottom {
+    padding-top: 3px !important;
+    margin-top: 1px !important;
+  }
+
+  body:not(.mode-standard) .coop-points {
+    font-size: 10px !important;
+  }
+
+  body:not(.mode-standard) .btn-coop-claim {
+    padding: 2px 6px !important;
+    font-size: 10px !important;
+    gap: 3px !important;
+  }
+
+  /* 4. Members Section (4 Columns, Left ~75.5%) */
+  body:not(.mode-standard) .members-section {
+    grid-area: members !important;
+    height: 100% !important;
+    min-height: 0 !important;
+    display: flex !important;
+    flex-direction: column !important;
+  }
+
+  body:not(.mode-standard) .members-grid {
+    display: grid !important;
+    grid-template-columns: repeat(4, 1fr) !important;
+    gap: 8px !important;
+    height: 100% !important;
+    min-height: 0 !important;
+  }
+
+  body:not(.mode-standard) .member-column-card {
+    height: 100% !important;
+    min-height: 0 !important;
+    display: flex !important;
+    flex-direction: column !important;
+    border-radius: var(--radius-md) !important;
+  }
+
+  body:not(.mode-standard) .member-header {
+    padding: 8px 10px !important;
+    flex-shrink: 0 !important;
+  }
+
+  body:not(.mode-standard) .member-header-top {
+    margin-bottom: 4px !important;
+  }
+
+  body:not(.mode-standard) .member-role-badge,
+  body:not(.mode-standard) .member-today-badge {
+    font-size: 10px !important;
+    padding: 1px 6px !important;
+  }
+
+  body:not(.mode-standard) .member-profile-row {
+    gap: 8px !important;
+  }
+
+  body:not(.mode-standard) .member-avatar {
+    width: 38px !important;
+    height: 38px !important;
+    font-size: 20px !important;
+  }
+
+  body:not(.mode-standard) .member-name {
+    font-size: 14px !important;
+    gap: 4px !important;
+  }
+
+  body:not(.mode-standard) .member-level-badge {
+    font-size: 9px !important;
+    padding: 1px 4px !important;
+  }
+
+  body:not(.mode-standard) .member-level-bar-box {
+    margin-top: 2px !important;
+  }
+
+  body:not(.mode-standard) .level-progress-bg {
+    height: 4px !important;
+  }
+
+  body:not(.mode-standard) .level-text-sub {
+    font-size: 9px !important;
+    margin-top: 1px !important;
+  }
+
+  body:not(.mode-standard) .member-score-display {
+    padding: 4px 10px !important;
+    flex-shrink: 0 !important;
+  }
+
+  body:not(.mode-standard) .score-num {
+    font-size: 20px !important;
+  }
+
+  body:not(.mode-standard) .score-unit {
+    font-size: 10px !important;
+  }
+
+  body:not(.mode-standard) .score-lifetime {
+    font-size: 9px !important;
+  }
+
+  body:not(.mode-standard) .quick-action-strip {
+    padding: 3px 8px !important;
+    gap: 4px !important;
+    flex-shrink: 0 !important;
+  }
+
+  body:not(.mode-standard) .btn-point-quick {
+    font-size: 10px !important;
+    padding: 2px 5px !important;
+  }
+
+  body:not(.mode-standard) .btn-adjust-custom {
+    font-size: 10px !important;
+    padding: 2px 6px !important;
+  }
+
+  body:not(.mode-standard) .member-tasks-container {
+    flex: 1 !important;
+    min-height: 0 !important;
+    max-height: none !important;
+    overflow-y: auto !important;
+    padding: 6px 10px !important;
+    gap: 4px !important;
+  }
+
+  body:not(.mode-standard) .task-category-title {
+    font-size: 9px !important;
+    margin-top: 1px !important;
+    margin-bottom: 1px !important;
+  }
+
+  body:not(.mode-standard) .task-item {
+    padding: 4px 6px !important;
+    gap: 6px !important;
+  }
+
+  body:not(.mode-standard) .task-checkbox {
+    width: 15px !important;
+    height: 15px !important;
+    font-size: 9px !important;
+  }
+
+  body:not(.mode-standard) .task-title {
+    font-size: 11px !important;
+    line-height: 1.25 !important;
+  }
+
+  body:not(.mode-standard) .task-badge-cat {
+    font-size: 9px !important;
+  }
+
+  body:not(.mode-standard) .task-points-tag {
+    font-size: 10px !important;
+    padding: 1px 4px !important;
+  }
+
+  body:not(.mode-standard) .btn-add-member-task {
+    padding: 3px 6px !important;
+    font-size: 10px !important;
+    margin-top: 2px !important;
+  }
+
+  body:not(.mode-standard) .member-wish-widget {
+    padding: 5px 10px !important;
+    flex-shrink: 0 !important;
+  }
+
+  body:not(.mode-standard) .wish-header {
+    font-size: 10px !important;
+    margin-bottom: 2px !important;
+  }
+
+  body:not(.mode-standard) .wish-bar-bg {
+    height: 4px !important;
+    margin-bottom: 2px !important;
+  }
+
+  body:not(.mode-standard) .wish-footer {
+    font-size: 9px !important;
+  }
+
+  body:not(.mode-standard) .btn-redeem-wish {
+    font-size: 9px !important;
+    padding: 1px 5px !important;
+  }
+
+  /* 5. Command Rail (Right ~24.5%, Stacked Feed & Showcase) */
+  body:not(.mode-standard) .bottom-rail {
+    grid-area: rail !important;
+    height: 100% !important;
+    min-height: 0 !important;
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 8px !important;
+  }
+
+  body:not(.mode-standard) .rail-card {
+    flex: 1 !important;
+    min-height: 0 !important;
+    display: flex !important;
+    flex-direction: column !important;
+    padding: 8px 10px !important;
+    border-radius: var(--radius-md) !important;
+  }
+
+  body:not(.mode-standard) .rail-header {
+    margin-bottom: 6px !important;
+    padding-bottom: 4px !important;
+    flex-shrink: 0 !important;
+  }
+
+  body:not(.mode-standard) .rail-title {
+    font-size: 12px !important;
+    gap: 4px !important;
+  }
+
+  body:not(.mode-standard) .badge-sub,
+  body:not(.mode-standard) .link-more {
+    font-size: 10px !important;
+  }
+
+  body:not(.mode-standard) .activity-feed-list {
+    flex: 1 !important;
+    min-height: 0 !important;
+    max-height: none !important;
+    overflow-y: auto !important;
+    gap: 4px !important;
+  }
+
+  body:not(.mode-standard) .log-item {
+    padding: 4px 6px !important;
+    font-size: 11px !important;
+    gap: 6px !important;
+  }
+
+  body:not(.mode-standard) .log-member-tag {
+    font-size: 10px !important;
+  }
+
+  body:not(.mode-standard) .log-reason {
+    font-size: 10px !important;
+  }
+
+  body:not(.mode-standard) .log-change {
+    font-size: 11px !important;
+  }
+
+  body:not(.mode-standard) .log-time {
+    font-size: 9px !important;
+  }
+
+  body:not(.mode-standard) .rewards-showcase-grid {
+    flex: 1 !important;
+    min-height: 0 !important;
+    max-height: none !important;
+    overflow-y: auto !important;
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 5px !important;
+    align-content: start !important;
+  }
+
+  body:not(.mode-standard) .reward-mini-card {
+    padding: 4px 6px !important;
+    gap: 5px !important;
+  }
+
+  body:not(.mode-standard) .reward-icon {
+    font-size: 16px !important;
+  }
+
+  body:not(.mode-standard) .reward-title {
+    font-size: 10px !important;
+  }
+
+  body:not(.mode-standard) .reward-cost {
+    font-size: 10px !important;
+  }
+
+  body:not(.mode-standard) .btn-redeem-quick {
+    font-size: 9px !important;
+    padding: 2px 5px !important;
+  }
+
+  /* 6. Footer (Ultra-slim Status Bar) */
+  body:not(.mode-standard) .footer-bar {
+    padding: 2px 10px !important;
+    margin-top: 0 !important;
+    font-size: 10px !important;
+    height: 20px !important;
+    flex-shrink: 0 !important;
+  }
+}
+
+/* Also allow forced ultrawide mode explicitly via body.mode-ultrawide */
+body.mode-ultrawide {
+  height: 100% !important;
+  overflow: hidden !important;
+}
+
+body.mode-ultrawide .screen-container {
+  height: 100vh !important;
+  max-height: 100vh !important;
+  overflow: hidden !important;
+  padding: 8px 14px 6px 14px !important;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 8px !important;
+  box-sizing: border-box !important;
+}
+
+body.mode-ultrawide .top-nav {
+  padding: 5px 14px !important;
+  margin-bottom: 0 !important;
+  height: 44px !important;
+  flex-shrink: 0 !important;
+  gap: 10px !important;
+  border-radius: var(--radius-md) !important;
+}
+
+body.mode-ultrawide .brand-logo { gap: 8px !important; }
+body.mode-ultrawide .logo-icon { font-size: 22px !important; }
+body.mode-ultrawide .brand-title { font-size: 15px !important; }
+body.mode-ultrawide .brand-sub { font-size: 11px !important; }
+body.mode-ultrawide .nav-center { gap: 8px !important; }
+body.mode-ultrawide .stat-pill { padding: 3px 10px !important; font-size: 12px !important; gap: 6px !important; }
+body.mode-ultrawide .pill-icon { font-size: 14px !important; }
+body.mode-ultrawide .current-time-pill { padding: 3px 10px !important; font-size: 12px !important; }
+body.mode-ultrawide .nav-right { gap: 8px !important; }
+body.mode-ultrawide .nav-btn { padding: 4px 10px !important; font-size: 12px !important; gap: 4px !important; }
+
+body.mode-ultrawide .panoramic-board {
+  flex: 1 !important;
+  min-height: 0 !important;
+  display: grid !important;
+  grid-template-columns: minmax(0, 1fr) minmax(360px, 24.5vw) !important;
+  grid-template-rows: auto minmax(0, 1fr) !important;
+  grid-template-areas:
+    "coop coop"
+    "members rail" !important;
+  gap: 8px !important;
+}
+
+body.mode-ultrawide .coop-section {
+  grid-area: coop !important;
+  flex-shrink: 0 !important;
+  padding: 6px 12px !important;
+  border-radius: var(--radius-md) !important;
+}
+
+body.mode-ultrawide .section-header { margin-bottom: 4px !important; }
+body.mode-ultrawide .header-left { gap: 8px !important; }
+body.mode-ultrawide .section-icon { font-size: 16px !important; padding: 3px !important; }
+body.mode-ultrawide .section-title { font-size: 13px !important; gap: 6px !important; }
+body.mode-ultrawide .badge-highlight { font-size: 10px !important; padding: 1px 5px !important; }
+body.mode-ultrawide .section-desc { font-size: 11px !important; margin-top: 0 !important; }
+body.mode-ultrawide .coop-cards-grid {
+  display: grid !important;
+  grid-template-columns: repeat(6, 1fr) !important;
+  gap: 6px !important;
+}
+
+body.mode-ultrawide .coop-card {
+  padding: 5px 8px !important;
+  gap: 3px !important;
+  border-radius: var(--radius-sm) !important;
+}
+
+body.mode-ultrawide .coop-card-top { gap: 6px !important; align-items: center !important; }
+body.mode-ultrawide .coop-icon { font-size: 20px !important; }
+body.mode-ultrawide .coop-info { min-width: 0 !important; }
+body.mode-ultrawide .coop-title { font-size: 11px !important; margin-bottom: 1px !important; white-space: nowrap !important; overflow: hidden !important; text-overflow: ellipsis !important; }
+body.mode-ultrawide .coop-tag { font-size: 9px !important; padding: 0 4px !important; }
+body.mode-ultrawide .coop-desc {
+  font-size: 10px !important;
+  color: var(--text-muted) !important;
+  margin-top: 1px !important;
+  line-height: 1.2 !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  display: block !important;
+}
+
+body.mode-ultrawide .coop-card-bottom { padding-top: 3px !important; margin-top: 1px !important; }
+body.mode-ultrawide .coop-points { font-size: 10px !important; }
+body.mode-ultrawide .btn-coop-claim { padding: 2px 6px !important; font-size: 10px !important; gap: 3px !important; }
+
+body.mode-ultrawide .members-section {
+  grid-area: members !important;
+  height: 100% !important;
+  min-height: 0 !important;
+  display: flex !important;
+  flex-direction: column !important;
+}
+
+body.mode-ultrawide .members-grid {
+  display: grid !important;
+  grid-template-columns: repeat(4, 1fr) !important;
+  gap: 8px !important;
+  height: 100% !important;
+  min-height: 0 !important;
+}
+
+body.mode-ultrawide .member-column-card {
+  height: 100% !important;
+  min-height: 0 !important;
+  display: flex !important;
+  flex-direction: column !important;
+  border-radius: var(--radius-md) !important;
+}
+
+body.mode-ultrawide .member-header { padding: 8px 10px !important; flex-shrink: 0 !important; }
+body.mode-ultrawide .member-header-top { margin-bottom: 4px !important; }
+body.mode-ultrawide .member-role-badge,
+body.mode-ultrawide .member-today-badge { font-size: 10px !important; padding: 1px 6px !important; }
+body.mode-ultrawide .member-profile-row { gap: 8px !important; }
+body.mode-ultrawide .member-avatar { width: 38px !important; height: 38px !important; font-size: 20px !important; }
+body.mode-ultrawide .member-name { font-size: 14px !important; gap: 4px !important; }
+body.mode-ultrawide .member-level-badge { font-size: 9px !important; padding: 1px 4px !important; }
+body.mode-ultrawide .member-level-bar-box { margin-top: 2px !important; }
+body.mode-ultrawide .level-progress-bg { height: 4px !important; }
+body.mode-ultrawide .level-text-sub { font-size: 9px !important; margin-top: 1px !important; }
+
+body.mode-ultrawide .member-score-display { padding: 4px 10px !important; flex-shrink: 0 !important; }
+body.mode-ultrawide .score-num { font-size: 20px !important; }
+body.mode-ultrawide .score-unit { font-size: 10px !important; }
+body.mode-ultrawide .score-lifetime { font-size: 9px !important; }
+
+body.mode-ultrawide .quick-action-strip { padding: 3px 8px !important; gap: 4px !important; flex-shrink: 0 !important; }
+body.mode-ultrawide .btn-point-quick { font-size: 10px !important; padding: 2px 5px !important; }
+body.mode-ultrawide .btn-adjust-custom { font-size: 10px !important; padding: 2px 6px !important; }
+
+body.mode-ultrawide .member-tasks-container {
+  flex: 1 !important;
+  min-height: 0 !important;
+  max-height: none !important;
+  overflow-y: auto !important;
+  padding: 6px 10px !important;
+  gap: 4px !important;
+}
+
+body.mode-ultrawide .task-category-title { font-size: 9px !important; margin-top: 1px !important; margin-bottom: 1px !important; }
+body.mode-ultrawide .task-item { padding: 4px 6px !important; gap: 6px !important; }
+body.mode-ultrawide .task-checkbox { width: 15px !important; height: 15px !important; font-size: 9px !important; }
+body.mode-ultrawide .task-title { font-size: 11px !important; line-height: 1.25 !important; }
+body.mode-ultrawide .task-badge-cat { font-size: 9px !important; }
+body.mode-ultrawide .task-points-tag { font-size: 10px !important; padding: 1px 4px !important; }
+body.mode-ultrawide .btn-add-member-task { padding: 3px 6px !important; font-size: 10px !important; margin-top: 2px !important; }
+
+body.mode-ultrawide .member-wish-widget { padding: 5px 10px !important; flex-shrink: 0 !important; }
+body.mode-ultrawide .wish-header { font-size: 10px !important; margin-bottom: 2px !important; }
+body.mode-ultrawide .wish-bar-bg { height: 4px !important; margin-bottom: 2px !important; }
+body.mode-ultrawide .wish-footer { font-size: 9px !important; }
+body.mode-ultrawide .btn-redeem-wish { font-size: 9px !important; padding: 1px 5px !important; }
+
+body.mode-ultrawide .bottom-rail {
+  grid-area: rail !important;
+  height: 100% !important;
+  min-height: 0 !important;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 8px !important;
+}
+
+body.mode-ultrawide .rail-card {
+  flex: 1 !important;
+  min-height: 0 !important;
+  display: flex !important;
+  flex-direction: column !important;
+  padding: 8px 10px !important;
+  border-radius: var(--radius-md) !important;
+}
+
+body.mode-ultrawide .rail-header { margin-bottom: 6px !important; padding-bottom: 4px !important; flex-shrink: 0 !important; }
+body.mode-ultrawide .rail-title { font-size: 12px !important; gap: 4px !important; }
+body.mode-ultrawide .badge-sub,
+body.mode-ultrawide .link-more { font-size: 10px !important; }
+
+body.mode-ultrawide .activity-feed-list {
+  flex: 1 !important;
+  min-height: 0 !important;
+  max-height: none !important;
+  overflow-y: auto !important;
+  gap: 4px !important;
+}
+
+body.mode-ultrawide .log-item { padding: 4px 6px !important; font-size: 11px !important; gap: 6px !important; }
+body.mode-ultrawide .log-member-tag { font-size: 10px !important; }
+body.mode-ultrawide .log-reason { font-size: 10px !important; }
+body.mode-ultrawide .log-change { font-size: 11px !important; }
+body.mode-ultrawide .log-time { font-size: 9px !important; }
+
+body.mode-ultrawide .rewards-showcase-grid {
+  flex: 1 !important;
+  min-height: 0 !important;
+  max-height: none !important;
+  overflow-y: auto !important;
+  grid-template-columns: repeat(2, 1fr) !important;
+  gap: 5px !important;
+  align-content: start !important;
+}
+
+body.mode-ultrawide .reward-mini-card { padding: 4px 6px !important; gap: 5px !important; }
+body.mode-ultrawide .reward-icon { font-size: 16px !important; }
+body.mode-ultrawide .reward-title { font-size: 10px !important; }
+body.mode-ultrawide .reward-cost { font-size: 10px !important; }
+body.mode-ultrawide .btn-redeem-quick { font-size: 9px !important; padding: 2px 5px !important; }
+
+body.mode-ultrawide .footer-bar {
+  padding: 2px 10px !important;
+  margin-top: 0 !important;
+  font-size: 10px !important;
+  height: 20px !important;
+  flex-shrink: 0 !important;
 }

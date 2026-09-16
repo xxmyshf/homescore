@@ -14,7 +14,7 @@
 <body class="theme-dark">
   <!-- Audio Context & Tone Synthesizer will be initialized in app.js -->
 
-  <div class="screen-container">
+  <div class="screen-container" id="screen-container">
     <!-- Top Header: Command Bar -->
     <header class="top-nav">
       <div class="nav-left">
@@ -25,7 +25,10 @@
             <div class="brand-sub" id="family-motto">全家同行 · 互助自律 · 快乐成长</div>
           </div>
         </div>
-        <div class="ultra-badge">21:9 宽屏指挥舱</div>
+        <button class="ultra-badge" id="btn-toggle-ultrawide" title="点击切换免滚动宽屏看板 / 流式滚动看板">
+          <span class="ultra-badge-icon">🖥️</span>
+          <span id="ultra-badge-text">21:9 宽屏指挥舱 (免滚动)</span>
+        </button>
       </div>
 
       <div class="nav-center">
