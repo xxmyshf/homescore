@@ -6,6 +6,10 @@ let currentAdjustMemberId = null;
 let currentCoopActivityId = null;
 let selectedParticipants = [];
 
+function _t(key, params) {
+  return window.I18N ? window.I18N.t(key, params) : key;
+}
+
 // Web Audio API Synthesizer (Zero external audio assets needed, 100% offline reliable)
 class SoundEngine {
   constructor() {
@@ -172,7 +176,7 @@ function updateBadgeUI(isUltrawide) {
   const badgeText = document.getElementById('badge-mode-text');
   const badgeBtn = document.getElementById('btn-toggle-ultrawide');
   if (badgeText) {
-    badgeText.textContent = isUltrawide ? '21:9 宽屏指挥舱 (免滚动)' : '标准流式看板';
+    badgeText.textContent = isUltrawide ? _t('ultra_badge_ultrawide') : _t('ultra_badge_standard');
   }
   if (badgeBtn) {
     if (isUltrawide) {
@@ -185,12 +189,14 @@ function updateBadgeUI(isUltrawide) {
 
 function initClock() {
   const clockEl = document.getElementById('current-clock');
-  const days = ['星期日', '星期一', '星期二', '星期三', '星期四', '星期五', '星期六'];
+  const daysZh = ['星期日', '星期一', '星期二', '星期三', '星期四', '星期五', '星期六'];
+  const daysEn = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
   const update = () => {
+    const isEn = window.I18N && window.I18N.getLanguage() === 'en';
     const now = new Date();
-    const timeStr = now.toLocaleTimeString('zh-CN', { hour12: false });
-    const dateStr = `${now.getMonth() + 1}月${now.getDate()}日`;
-    const dayStr = days[now.getDay()];
+    const timeStr = now.toLocaleTimeString(isEn ? 'en-US' : 'zh-CN', { hour12: false });
+    const dateStr = isEn ? now.toLocaleDateString('en-US', { month: 'short', day: 'numeric' }) : `${now.getMonth() + 1}月${now.getDate()}日`;
+    const dayStr = isEn ? daysEn[now.getDay()] : daysZh[now.getDay()];
     clockEl.textContent = `${dateStr} ${dayStr} ${timeStr}`;
   };
   update();
@@ -203,7 +209,7 @@ function setupEventListeners() {
   soundBtn.addEventListener('click', () => {
     soundEnabled = !soundEnabled;
     document.getElementById('sound-icon').textContent = soundEnabled ? '🔊' : '🔇';
-    soundBtn.querySelector('.btn-label').textContent = soundEnabled ? '音效开启' : '音效静音';
+    soundBtn.querySelector('.btn-label').textContent = _t(soundEnabled ? 'sound_on' : 'sound_off');
     showToast(soundEnabled ? '🔔 音效已开启' : '🔕 音效已静音');
   });
 
@@ -229,6 +235,23 @@ function setupEventListeners() {
   if (brandLogoBtn) {
     brandLogoBtn.addEventListener('click', openTitleModal);
   }
+
+  // Language switch listener
+  window.addEventListener('homescore_lang_changed', () => {
+    if (appState) {
+      renderHeaderStats();
+      renderCoopActivities();
+      renderMembers();
+      renderActivityFeed();
+      renderRewardsShowcase();
+    }
+    const isUltrawide = document.body.classList.contains('mode-ultrawide');
+    updateBadgeUI(isUltrawide);
+    const sBtn = document.getElementById('btn-sound-toggle');
+    if (sBtn) {
+      sBtn.querySelector('.btn-label').textContent = _t(soundEnabled ? 'sound_on' : 'sound_off');
+    }
+  });
 }
 
 // --- Fetch & Render State ---
@@ -252,27 +275,29 @@ async function loadState() {
 // Render Header Stats
 function renderHeaderStats() {
   const { system, members, logs } = appState;
-  const familyName = (system && system.familyName) || '家庭积分奖励';
+  const defaultTitle = _t('site_default_title');
+  const defaultMotto = _t('site_default_motto');
+  const familyName = (system && system.familyName) || defaultTitle;
   const familyEl = document.getElementById('family-name');
   if (familyEl) {
-    familyEl.innerHTML = `${escapeHtml(familyName)} <span class="edit-title-badge" title="点击修改网站标题">✏️</span>`;
+    familyEl.innerHTML = `${escapeHtml(familyName)} <span class="edit-title-badge" title="${_t('modal_title_edit')}">✏️</span>`;
   }
   const mottoEl = document.getElementById('family-motto');
   if (mottoEl) {
-    mottoEl.textContent = (system && system.familyMotto) || '全家同行 · 互助自律 · 快乐成长';
+    mottoEl.textContent = (system && system.familyMotto) || defaultMotto;
   }
-  document.title = `${familyName} · 21:9 超宽屏协同看板`;
-  document.getElementById('stat-streak').textContent = `${system.streakDays || 1} 天`;
+  document.title = `${familyName} · 21:9`;
+  document.getElementById('stat-streak').textContent = `${system.streakDays || 1} ${_t('days')}`;
 
   const totalFamilyScore = members.reduce((sum, m) => sum + (m.score || 0), 0);
-  document.getElementById('stat-family-score').textContent = `${totalFamilyScore} 分`;
+  document.getElementById('stat-family-score').textContent = `${totalFamilyScore} ${_t('points')}`;
 
   // Calculate today's gain from logs
   const todayStr = new Date().toISOString().split('T')[0];
   const todayGain = logs
     .filter(l => l.timestamp.startsWith(todayStr) && l.change > 0)
     .reduce((sum, l) => sum + l.change, 0);
-  document.getElementById('stat-today-gain').textContent = `+${todayGain} 分`;
+  document.getElementById('stat-today-gain').textContent = `+${todayGain} ${_t('points')}`;
 }
 
 // Render Family Co-op Quests
@@ -288,14 +313,14 @@ function renderCoopActivities() {
         <div class="coop-icon">${act.icon || '🤝'}</div>
         <div class="coop-info">
           <div class="coop-title">${escapeHtml(act.title)}</div>
-          <span class="coop-tag">${escapeHtml(act.tag || '共同协作')}</span>
+          <span class="coop-tag">${escapeHtml(act.tag || _t('coop_hall_badge'))}</span>
           <div class="coop-desc">${escapeHtml(act.description || '')}</div>
         </div>
       </div>
       <div class="coop-card-bottom">
-        <div class="coop-points">全员各 +${act.pointsPerPerson} 分</div>
+        <div class="coop-points">${_t('coop_per_person', { n: act.pointsPerPerson })}</div>
         <button class="btn-coop-claim" onclick="openCoopModal('${act.id}')">
-          <span>🎉</span> 全家齐心打卡
+          <span>🎉</span> ${_t('coop_claim_btn')}
         </button>
       </div>
     `;
@@ -331,7 +356,7 @@ function renderMembers() {
       <div class="member-header">
         <div class="member-header-top">
           <span class="member-role-badge">${escapeHtml(member.role)}</span>
-          <span class="member-today-badge">今日已成 ${completedTasksCount}/${memberTasks.length} 项</span>
+          <span class="member-today-badge">${_t('today_tasks_count', { done: completedTasksCount, total: memberTasks.length })}</span>
         </div>
         <div class="member-profile-row">
           <div class="member-avatar" style="border-color: ${member.themeColor};">${member.avatar || '🌟'}</div>
@@ -345,8 +370,8 @@ function renderMembers() {
                 <div class="level-progress-fill" style="width: ${progressPercent}%;"></div>
               </div>
               <div class="level-text-sub">
-                <span>成长总能值: ${member.totalEarned || member.score}</span>
-                <span>下一级还需 ${Math.max(0, nextLevelThreshold - member.totalEarned)}</span>
+                <span>${_t('growth_score')}: ${member.totalEarned || member.score}</span>
+                <span>${_t('next_level_need', { n: Math.max(0, nextLevelThreshold - member.totalEarned) })}</span>
               </div>
             </div>
           </div>
@@ -357,9 +382,9 @@ function renderMembers() {
       <div class="member-score-display">
         <div class="score-main">
           <span class="score-num" id="score-num-${member.id}">${member.score}</span>
-          <span class="score-unit">当前可用积分</span>
+          <span class="score-unit">${_t('current_available_score')}</span>
         </div>
-        <div class="score-lifetime">历史总产出: ${member.totalEarned || member.score} 分</div>
+        <div class="score-lifetime">${_t('lifetime_score', { n: member.totalEarned || member.score })}</div>
       </div>
 
       <!-- Quick Adjust Strip -->
@@ -368,12 +393,12 @@ function renderMembers() {
         <button class="btn-point-quick point-add" onclick="quickAdjust('${member.id}', 5, '好习惯打卡')">+5</button>
         <button class="btn-point-quick point-add" onclick="quickAdjust('${member.id}', 10, '突出优秀表现')">+10</button>
         <button class="btn-point-quick point-sub" onclick="quickAdjust('${member.id}', -5, '提醒纠正扣除')">-5</button>
-        <button class="btn-adjust-custom" onclick="openAdjustModal('${member.id}')">⚡ 快捷奖惩</button>
+        <button class="btn-adjust-custom" onclick="openAdjustModal('${member.id}')">${_t('quick_adjust')}</button>
       </div>
 
       <!-- Task Checklist -->
       <div class="member-tasks-container">
-        <div class="task-category-title">今日专属打卡任务</div>
+        <div class="task-category-title">${_t('today_tasks_title')}</div>
         ${
           memberTasks.length === 0
             ? `<div style="font-size:12px;color:var(--text-muted);padding:10px 0;">暂无专属任务，可点击下方添加</div>`
@@ -386,28 +411,28 @@ function renderMembers() {
                       <div class="task-badge-cat">${escapeHtml(task.category || '日常习惯')}</div>
                     </div>
                   </div>
-                  <div class="task-points-tag">+${task.points}分</div>
+                  <div class="task-points-tag">+${task.points} ${_t('points')}</div>
                 </div>
               `).join('')
         }
         <button class="btn-add-member-task" onclick="openQuickTaskModal('${member.id}', '${escapeHtml(member.name)}')">
-          ＋ 为${escapeHtml(member.name)}增添新任务
+          ${_t('add_task_for_member', { name: escapeHtml(member.name) })}
         </button>
       </div>
 
       <!-- Wish Progress Mini Widget -->
       <div class="member-wish-widget">
         <div class="wish-header">
-          <span class="wish-label">🎯 心愿目标：</span>
-          <span class="wish-target-title">${escapeHtml(member.wishTitle || '心仪心愿')} (${member.wishCost || 100}分)</span>
+          <span class="wish-label">${_t('wish_target')}</span>
+          <span class="wish-target-title">${escapeHtml(member.wishTitle || '心仪心愿')} (${member.wishCost || 100} ${_t('points')})</span>
         </div>
         <div class="wish-bar-bg">
           <div class="wish-bar-fill" style="width: ${wishProgressPercent}%;"></div>
         </div>
         <div class="wish-footer">
-          <span>进度: ${wishProgressPercent}% (${member.score}/${wishCost})</span>
+          <span>${_t('progress')}: ${wishProgressPercent}% (${member.score}/${wishCost})</span>
           <button class="btn-redeem-wish" ${canRedeemWish ? '' : 'disabled'} onclick="redeemMemberWish('${member.id}', '${escapeHtml(member.wishTitle)}', ${wishCost})">
-            ${canRedeemWish ? '🎁 可兑换心愿' : '积攒中'}
+            ${canRedeemWish ? _t('can_redeem_wish') : _t('saving_wish')}
           </button>
         </div>
       </div>
@@ -455,7 +480,7 @@ function renderRewardsShowcase() {
   const rewards = appState.rewards || [];
   rewards.forEach(rew => {
     const member = appState.members.find(m => m.id === rew.memberId);
-    const memberName = member ? member.name : '全员可用';
+    const memberName = member ? member.name : _t('general_reward');
 
     const card = document.createElement('div');
     card.className = 'reward-mini-card';
@@ -463,9 +488,9 @@ function renderRewardsShowcase() {
       <div class="reward-icon">${rew.icon || '🎁'}</div>
       <div class="reward-info">
         <div class="reward-title">${escapeHtml(rew.title)}</div>
-        <div class="reward-cost">${rew.cost} 积分 · <span style="color:var(--text-muted);font-size:10px;">${memberName}</span></div>
+        <div class="reward-cost">${rew.cost} ${_t('points')} · <span style="color:var(--text-muted);font-size:10px;">${memberName}</span></div>
       </div>
-      <button class="btn-redeem-quick" onclick="redeemRewardFromList('${rew.id}')">兑换</button>
+      <button class="btn-redeem-quick" onclick="redeemRewardFromList('${rew.id}')">${_t('redeem_btn')}</button>
     `;
     container.appendChild(card);
   });
@@ -526,12 +551,12 @@ function openAdjustModal(memberId) {
   const member = appState.members.find(m => m.id === memberId);
   if (!member) return;
 
-  document.getElementById('adjust-modal-title').textContent = `为【${member.name}】快捷奖惩与记录闪光点`;
+  document.getElementById('adjust-modal-title').textContent = _t('modal_adjust_title', { name: member.name });
   document.getElementById('adjust-member-preview').innerHTML = `
     <div style="font-size:28px;">${member.avatar}</div>
     <div>
-      <div style="font-weight:700;color:#fff;">${member.name} (${member.role})</div>
-      <div style="font-size:11px;color:var(--text-secondary);">当前积分: <strong style="color:#facc15;">${member.score}</strong> 分</div>
+      <div style="font-weight:700;color:#fff;">${escapeHtml(member.name)} (${escapeHtml(member.role)})</div>
+      <div style="font-size:11px;color:var(--text-secondary);">${_t('current_available_score')}: <strong style="color:#facc15;">${member.score}</strong> ${_t('points')}</div>
     </div>
   `;
 
@@ -595,12 +620,12 @@ function openCoopModal(activityId) {
     <div style="display:flex;align-items:center;gap:12px;margin-bottom:8px;">
       <div style="font-size:36px;">${act.icon}</div>
       <div>
-        <h3 style="color:#fff;font-size:16px;">${act.title}</h3>
-        <p style="font-size:12px;color:#34d399;font-weight:700;">人均奖励：+${act.pointsPerPerson} 积分</p>
+        <h3 style="color:#fff;font-size:16px;">${escapeHtml(act.title)}</h3>
+        <p style="font-size:12px;color:#34d399;font-weight:700;">${_t('coop_per_person', { n: act.pointsPerPerson })}</p>
       </div>
     </div>
     <div style="font-size:12px;color:var(--text-secondary);background:rgba(255,255,255,0.03);padding:8px;border-radius:6px;">
-      ${act.description}
+      ${escapeHtml(act.description || '')}
     </div>
   `;
 
@@ -615,20 +640,20 @@ function openCoopModal(activityId) {
     chip.id = `part-chip-${member.id}`;
     chip.innerHTML = `
       <span>${member.avatar}</span>
-      <span style="font-size:12px;font-weight:600;">${member.name}</span>
-      <span style="font-size:10px;color:#34d399;">✓ 参与</span>
+      <span style="font-size:12px;font-weight:600;">${escapeHtml(member.name)}</span>
+      <span style="font-size:10px;color:#34d399;">${_t('participate')}</span>
     `;
     chip.onclick = () => {
       const idx = selectedParticipants.indexOf(member.id);
       if (idx > -1) {
         selectedParticipants.splice(idx, 1);
         chip.classList.remove('selected');
-        chip.querySelector('span:last-child').textContent = '✕ 缺席';
+        chip.querySelector('span:last-child').textContent = _t('absent');
         chip.querySelector('span:last-child').style.color = 'var(--text-muted)';
       } else {
         selectedParticipants.push(member.id);
         chip.classList.add('selected');
-        chip.querySelector('span:last-child').textContent = '✓ 参与';
+        chip.querySelector('span:last-child').textContent = _t('participate');
         chip.querySelector('span:last-child').style.color = '#34d399';
       }
     };
@@ -720,7 +745,7 @@ async function redeemRewardFromList(rewardId) {
 // 6. Quick Add Task
 function openQuickTaskModal(memberId, memberName) {
   document.getElementById('quick-task-member-id').value = memberId;
-  document.getElementById('quick-task-title').textContent = `为【${memberName}】添加今日新任务`;
+  document.getElementById('quick-task-title').textContent = _t('modal_quick_task_title', { name: memberName });
   document.getElementById('quick-task-name').value = '';
   document.getElementById('quick-task-points').value = '10';
   document.getElementById('modal-quick-task').style.display = 'flex';

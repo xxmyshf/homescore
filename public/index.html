@@ -34,17 +34,17 @@
       <div class="nav-center">
         <div class="stat-pill streak-pill">
           <span class="pill-icon">🔥</span>
-          <span class="pill-label">连续打卡</span>
+          <span class="pill-label" data-i18n="streak">连续打卡</span>
           <span class="pill-value" id="stat-streak">15 天</span>
         </div>
         <div class="stat-pill family-score-pill">
           <span class="pill-icon">⭐</span>
-          <span class="pill-label">家庭总能值</span>
+          <span class="pill-label" data-i18n="family_score">家庭总能值</span>
           <span class="pill-value" id="stat-family-score">630 分</span>
         </div>
         <div class="stat-pill today-gain-pill">
           <span class="pill-icon">📈</span>
-          <span class="pill-label">今日新增</span>
+          <span class="pill-label" data-i18n="today_gain">今日新增</span>
           <span class="pill-value" id="stat-today-gain">+75 分</span>
         </div>
         <div class="current-time-pill" id="current-clock">
@@ -53,18 +53,22 @@
       </div>
 
       <div class="nav-right">
+        <button id="btn-lang-toggle" class="nav-btn" title="切换语言 / Switch Language" onclick="I18N.toggleLanguage()">
+          <span class="btn-icon">🌐</span>
+          <span class="btn-label">English</span>
+        </button>
         <button id="btn-sound-toggle" class="nav-btn" title="音效开关">
           <span class="btn-icon" id="sound-icon">🔊</span>
-          <span class="btn-label">音效开启</span>
+          <span class="btn-label" data-i18n="sound_on">音效开启</span>
         </button>
         <button id="btn-fullscreen" class="nav-btn" title="全屏显示">
           <span class="btn-icon">⛶</span>
-          <span class="btn-label">全屏看板</span>
+          <span class="btn-label" data-i18n="fullscreen">全屏看板</span>
         </button>
         <!-- Dedicated Link for Character Configuration -->
         <a href="./config.html" class="nav-btn nav-btn-primary config-link" id="link-config">
           <span class="btn-icon">⚙️</span>
-          <span class="btn-label">人物与家庭配置中心</span>
+          <span class="btn-label" data-i18n="config_center">人物与家庭配置中心</span>
         </a>
       </div>
     </header>
@@ -78,12 +82,12 @@
           <div class="header-left">
             <span class="section-icon">🤝</span>
             <div class="header-titles">
-              <h2 class="section-title">家庭同心协作大厅 <span class="badge-highlight">做了一起加积分</span></h2>
-              <p class="section-desc">家长与孩子共同参与，协同达成家庭大事件，全员同步加分，共筑温馨自律好风气！</p>
+              <h2 class="section-title"><span data-i18n="coop_hall_title">家庭同心协作大厅</span> <span class="badge-highlight" data-i18n="coop_hall_badge">做了一起加积分</span></h2>
+              <p class="section-desc" data-i18n="coop_hall_desc">家长与孩子共同参与，协同达成家庭大事件，全员同步加分，共筑温馨自律好风气！</p>
             </div>
           </div>
           <div class="header-right">
-            <button class="btn-sm btn-ghost" id="btn-quick-coop-info">💡 协作理念与规则</button>
+            <button class="btn-sm btn-ghost" id="btn-quick-coop-info" data-i18n="coop_rules_btn">💡 协作理念与规则</button>
           </div>
         </div>
 
@@ -104,8 +108,8 @@
         <!-- Live Score Logs Feed -->
         <div class="rail-card activity-feed-card">
           <div class="rail-header">
-            <div class="rail-title"><span class="icon">📜</span> 实时积分与荣耀动态</div>
-            <span class="badge-sub" id="log-count-badge">最近记录</span>
+            <div class="rail-title"><span class="icon">📜</span> <span data-i18n="activity_feed_title">实时积分与荣耀动态</span></div>
+            <span class="badge-sub" id="log-count-badge" data-i18n="recent_logs">最近记录</span>
           </div>
           <div class="activity-feed-list" id="activity-feed-list">
             <!-- Dynamic Log Items -->
@@ -115,8 +119,8 @@
         <!-- Family Wishes & Reward Showcase -->
         <div class="rail-card rewards-showcase-card">
           <div class="rail-header">
-            <div class="rail-title"><span class="icon">🎁</span> 心愿兑换商城</div>
-            <a href="./config.html#rewards" class="link-more">管理奖品 →</a>
+            <div class="rail-title"><span class="icon">🎁</span> <span data-i18n="rewards_mall_title">心愿兑换商城</span></div>
+            <a href="./config.html#rewards" class="link-more" data-i18n="manage_rewards">管理奖品 →</a>
           </div>
           <div class="rewards-showcase-grid" id="rewards-showcase-list">
             <!-- Dynamic Reward Items -->
@@ -128,14 +132,14 @@
 
     <footer class="footer-bar">
       <div class="footer-left">
-        <span>🏡 HomeScore 21:9 超宽屏家庭协同系统</span>
+        <span data-i18n="footer_text">🏡 HomeScore 21:9 超宽屏家庭协同系统</span>
         <span class="sep">|</span>
-        <span>理念源自现代亲子游戏化激励与正向心理学</span>
+        <span data-i18n="footer_philosophy">理念源自现代亲子游戏化激励与正向心理学</span>
       </div>
       <div class="footer-right">
-        <span id="data-status-text">🟢 后端持久化已连接</span>
+        <span id="data-status-text" data-i18n="backend_connected">🟢 数据持久化已连接</span>
         <span class="sep">|</span>
-        <a href="./config.html" class="footer-link">配置人物/任务/心愿</a>
+        <a href="./config.html" class="footer-link" data-i18n="footer_config_link">配置人物/任务/心愿</a>
       </div>
     </footer>
   </div>
@@ -153,14 +157,14 @@
         </div>
 
         <div class="form-group">
-          <label class="form-label">选择推荐好习惯 / 正向激励：</label>
+          <label class="form-label" data-i18n="rec_positive_habits">选择推荐好习惯 / 正向激励：</label>
           <div class="tags-group" id="positive-tags-container">
             <!-- Auto populated tags -->
           </div>
         </div>
 
         <div class="form-group">
-          <label class="form-label">纠偏引导 / 扣减提示（慎用）：</label>
+          <label class="form-label" data-i18n="rec_negative_habits">纠偏引导 / 扣减提示（慎用）：</label>
           <div class="tags-group" id="negative-tags-container">
             <!-- Auto populated tags -->
           </div>
@@ -168,18 +172,18 @@
 
         <div class="form-row-custom">
           <div class="form-group flex-1">
-            <label class="form-label">自定义分值 (+/-)：</label>
+            <label class="form-label" data-i18n="custom_delta_label">自定义分值 (+/-)：</label>
             <input type="number" id="input-adjust-delta" class="form-input" placeholder="+10 或 -5" value="10">
           </div>
           <div class="form-group flex-2">
-            <label class="form-label">奖惩原因 / 闪光点记录：</label>
+            <label class="form-label" data-i18n="custom_reason_label">奖惩原因 / 闪光点记录：</label>
             <input type="text" id="input-adjust-reason" class="form-input" placeholder="例如：今天主动帮忙扔垃圾">
           </div>
         </div>
       </div>
       <div class="modal-footer">
-        <button class="btn btn-secondary" onclick="closeAdjustModal()">取消</button>
-        <button class="btn btn-primary" id="btn-submit-adjust" onclick="submitAdjustScore()">确认并记入积分</button>
+        <button class="btn btn-secondary" onclick="closeAdjustModal()" data-i18n="modal_cancel">取消</button>
+        <button class="btn btn-primary" id="btn-submit-adjust" onclick="submitAdjustScore()" data-i18n="btn_submit_adjust">确认并记入积分</button>
       </div>
     </div>
   </div>
@@ -188,7 +192,7 @@
   <div class="modal-backdrop" id="modal-coop-confirm" style="display: none;">
     <div class="modal-box">
       <div class="modal-header">
-        <div class="modal-title" id="coop-modal-title">🎉 全家齐心协作打卡</div>
+        <div class="modal-title" id="coop-modal-title" data-i18n="coop_modal_title">🎉 全家齐心协作打卡</div>
         <button class="modal-close" onclick="closeCoopModal()">✕</button>
       </div>
       <div class="modal-body">
@@ -197,19 +201,19 @@
         </div>
 
         <div class="form-group">
-          <label class="form-label">选择参与本次协作的家庭成员（默认全员）：</label>
+          <label class="form-label" data-i18n="coop_select_members">选择参与本次协作的家庭成员（默认全员）：</label>
           <div class="participants-picker" id="coop-participants-list">
             <!-- Checkbox chips for all members -->
           </div>
         </div>
 
-        <div class="coop-reward-tip">
+        <div class="coop-reward-tip" data-i18n="coop_reward_tip">
           🌟 点击确认后，所选成员将<strong>各自获得对应积分</strong>，并在荣誉墙广播！
         </div>
       </div>
       <div class="modal-footer">
-        <button class="btn btn-secondary" onclick="closeCoopModal()">返回</button>
-        <button class="btn btn-success" id="btn-submit-coop" onclick="submitCoopComplete()">齐心达成，全员加分！</button>
+        <button class="btn btn-secondary" onclick="closeCoopModal()" data-i18n="modal_cancel">返回</button>
+        <button class="btn btn-success" id="btn-submit-coop" onclick="submitCoopComplete()" data-i18n="coop_submit_btn">齐心达成，全员加分！</button>
       </div>
     </div>
   </div>
@@ -224,12 +228,12 @@
       <div class="modal-body">
         <input type="hidden" id="quick-task-member-id">
         <div class="form-group">
-          <label class="form-label">任务名称：</label>
+          <label class="form-label" data-i18n="task_name_label">任务名称：</label>
           <input type="text" id="quick-task-name" class="form-input" placeholder="例如：背诵一首古诗 / 整理床铺">
         </div>
         <div class="form-row">
           <div class="form-group flex-1">
-            <label class="form-label">分类：</label>
+            <label class="form-label" data-i18n="task_category_label">分类：</label>
             <select id="quick-task-category" class="form-select">
               <option value="学习自律">学习自律</option>
               <option value="生活习惯">生活习惯</option>
@@ -240,14 +244,14 @@
             </select>
           </div>
           <div class="form-group flex-1">
-            <label class="form-label">奖励分值：</label>
+            <label class="form-label" data-i18n="task_points_label">奖励分值：</label>
             <input type="number" id="quick-task-points" class="form-input" value="10" min="1" max="100">
           </div>
         </div>
       </div>
       <div class="modal-footer">
-        <button class="btn btn-secondary" onclick="closeQuickTaskModal()">取消</button>
-        <button class="btn btn-primary" onclick="submitQuickTask()">添加任务</button>
+        <button class="btn btn-secondary" onclick="closeQuickTaskModal()" data-i18n="modal_cancel">取消</button>
+        <button class="btn btn-primary" onclick="submitQuickTask()" data-i18n="btn_add_task">添加任务</button>
       </div>
     </div>
   </div>
@@ -256,22 +260,22 @@
   <div class="modal-backdrop" id="modal-edit-title" style="display: none;">
     <div class="modal-box">
       <div class="modal-header">
-        <div class="modal-title">🏷️ 修改网站标题与标语</div>
+        <div class="modal-title" data-i18n="modal_title_edit">🏷️ 修改网站标题与标语</div>
         <button class="modal-close" onclick="closeTitleModal()">✕</button>
       </div>
       <div class="modal-body">
         <div class="form-group">
-          <label class="form-label">网站标题 / 系统名称：</label>
-          <input type="text" id="input-site-title" class="form-input" placeholder="例如：家庭积分奖励 / 张家成长营 / 幸福一家人">
+          <label class="form-label" data-i18n="site_title_label">网站标题 / 系统名称：</label>
+          <input type="text" id="input-site-title" class="form-input" data-i18n-placeholder="site_title_placeholder" placeholder="例如：家庭积分奖励 / 张家成长营 / 幸福一家人">
         </div>
         <div class="form-group">
-          <label class="form-label">家庭座右铭 / 励志标语：</label>
-          <input type="text" id="input-site-motto" class="form-input" placeholder="例如：全家同行 · 互助自律 · 快乐成长">
+          <label class="form-label" data-i18n="site_motto_label">家庭座右铭 / 励志标语：</label>
+          <input type="text" id="input-site-motto" class="form-input" data-i18n-placeholder="site_motto_placeholder" placeholder="例如：全家同行 · 互助自律 · 快乐成长">
         </div>
       </div>
       <div class="modal-footer">
-        <button class="btn btn-secondary" onclick="closeTitleModal()">取消</button>
-        <button class="btn btn-primary" onclick="submitTitleModal()">保存并应用</button>
+        <button class="btn btn-secondary" onclick="closeTitleModal()" data-i18n="modal_cancel">取消</button>
+        <button class="btn btn-primary" onclick="submitTitleModal()" data-i18n="modal_save">保存并应用</button>
       </div>
     </div>
   </div>
@@ -279,6 +283,7 @@
   <!-- Toast Notification Container -->
   <div class="toast-container" id="toast-container"></div>
 
+  <script src="./i18n.js"></script>
   <script src="./app.js"></script>
 </body>
 </html>

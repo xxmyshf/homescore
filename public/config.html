@@ -18,38 +18,42 @@
       <div class="nav-left">
         <a href="./index.html" class="btn-back-board">
           <span class="icon">←</span>
-          <span>返回 21:9 家庭指挥大屏看板</span>
+          <span data-i18n="back_dashboard">返回指挥大屏</span>
         </a>
         <div class="config-header-title">
-          <h1>⚙️ 人物与家庭配置中心</h1>
-          <p>随时定制家庭成员、角色形象、专属习惯任务、协作大事件及心愿商城</p>
+          <h1 data-i18n="config_page_title">⚙️ 人物与家庭配置中心</h1>
+          <p data-i18n="config_page_desc">随时定制家庭成员、角色形象、专属习惯任务、协作大事件及心愿商城</p>
         </div>
       </div>
       <div class="nav-right">
-        <button class="btn btn-secondary" onclick="exportDataBackup()">📥 导出数据备份</button>
-        <button class="btn btn-secondary" onclick="triggerImportBackup()">📤 导入数据恢复</button>
-        <button class="btn btn-danger-soft" onclick="resetDefaultsConfirm()">🔄 重置默认家庭数据</button>
+        <button id="btn-lang-toggle" class="btn btn-secondary" onclick="I18N.toggleLanguage()">
+          <span class="btn-icon">🌐</span>
+          <span class="btn-label">English</span>
+        </button>
+        <button class="btn btn-secondary" onclick="exportDataBackup()" data-i18n="export_backup_btn">📥 导出数据备份</button>
+        <button class="btn btn-secondary" onclick="triggerImportBackup()" data-i18n="import_backup_btn">📤 导入数据恢复</button>
+        <button class="btn btn-danger-soft" onclick="resetDefaultsConfirm()" data-i18n="reset_defaults_btn">🔄 重置默认家庭数据</button>
         <input type="file" id="file-import" style="display:none;" accept=".json" onchange="handleFileImport(event)">
       </div>
     </header>
 
     <!-- Sub Navigation Tabs -->
     <div class="config-tabs-bar">
-      <button class="tab-btn active" onclick="switchTab('members')">👥 人物档案管理</button>
-      <button class="tab-btn" onclick="switchTab('tasks')">📋 专属任务配置</button>
-      <button class="tab-btn" onclick="switchTab('coop')">🤝 全家协作大任务</button>
-      <button class="tab-btn" onclick="switchTab('rewards')">🎁 心愿商城配置</button>
-      <button class="tab-btn" onclick="switchTab('system')">🏷️ 网站标题设置</button>
+      <button class="tab-btn active" onclick="switchTab('members')" data-i18n="tab_members">👥 人物档案管理</button>
+      <button class="tab-btn" onclick="switchTab('tasks')" data-i18n="tab_tasks">📋 专属任务配置</button>
+      <button class="tab-btn" onclick="switchTab('coop')" data-i18n="tab_coop">🤝 全家协作大任务</button>
+      <button class="tab-btn" onclick="switchTab('rewards')" data-i18n="tab_rewards">🎁 心愿商城配置</button>
+      <button class="tab-btn" onclick="switchTab('system')" data-i18n="tab_system">🏷️ 网站标题设置</button>
     </div>
 
     <!-- Tab 1: Member / Character Management -->
     <section id="tab-members" class="tab-panel active">
       <div class="panel-top-bar">
         <div>
-          <h2>家庭人物角色档案</h2>
-          <p>支持自由增删与修改家庭成员（爸爸、妈妈、大宝、二宝、长辈等），定义专属身份、形象与成长目标。</p>
+          <h2 data-i18n="members_panel_title">家庭人物角色档案</h2>
+          <p data-i18n="members_panel_desc">支持自由增删与修改家庭成员（爸爸、妈妈、大宝、二宝、长辈等），定义专属身份、形象与成长目标。</p>
         </div>
-        <button class="btn btn-primary" onclick="openMemberModal()">＋ 添加新家庭成员</button>
+        <button class="btn btn-primary" onclick="openMemberModal()" data-i18n="add_member_btn">＋ 添加新家庭成员</button>
       </div>
 
       <div class="members-cards-container" id="members-list-grid">
@@ -61,14 +65,14 @@
     <section id="tab-tasks" class="tab-panel">
       <div class="panel-top-bar">
         <div>
-          <h2>各人物专属打卡任务配置</h2>
-          <p>根据孩子年龄阶段与家长榜样职责，灵活规划习惯、学习、劳作与品德任务。</p>
+          <h2 data-i18n="tasks_panel_title">各人物专属打卡任务配置</h2>
+          <p data-i18n="tasks_panel_desc">根据孩子年龄阶段与家长榜样职责，灵活规划习惯、学习、劳作与品德任务。</p>
         </div>
         <div class="filter-controls">
           <select id="filter-task-member" class="form-select" onchange="renderTasksList()">
-            <option value="all">所有成员任务</option>
+            <option value="all" data-i18n="filter_all_tasks">所有成员任务</option>
           </select>
-          <button class="btn btn-primary" onclick="openTaskModal()">＋ 添加新任务</button>
+          <button class="btn btn-primary" onclick="openTaskModal()" data-i18n="add_task_btn">＋ 添加新任务</button>
         </div>
       </div>
 
@@ -76,12 +80,12 @@
         <table class="config-table">
           <thead>
             <tr>
-              <th>归属人物</th>
-              <th>任务名称</th>
-              <th>分类</th>
-              <th>奖励分值</th>
-              <th>频次</th>
-              <th>操作</th>
+              <th data-i18n="th_member">归属人物</th>
+              <th data-i18n="th_task_name">任务名称</th>
+              <th data-i18n="th_category">分类</th>
+              <th data-i18n="th_points">奖励分值</th>
+              <th data-i18n="th_frequency">频次</th>
+              <th data-i18n="th_actions">操作</th>
             </tr>
           </thead>
           <tbody id="tasks-table-body">
@@ -95,10 +99,10 @@
     <section id="tab-coop" class="tab-panel">
       <div class="panel-top-bar">
         <div>
-          <h2>家庭共同协作大任务 (做了一起加积分)</h2>
-          <p>规划全家共同参与的家务、阅读、运动与亲子时光，达成时全员同步加分，共筑温馨家风。</p>
+          <h2 data-i18n="coop_panel_title">家庭共同协作大任务 (做了一起加积分)</h2>
+          <p data-i18n="coop_panel_desc">规划全家共同参与的家务、阅读、运动与亲子时光，达成时全员同步加分，共筑温馨家风。</p>
         </div>
-        <button class="btn btn-primary" onclick="openCoopModal()">＋ 添加全家协作活动</button>
+        <button class="btn btn-primary" onclick="openCoopModal()" data-i18n="add_coop_btn">＋ 添加全家协作活动</button>
       </div>
 
       <div class="coop-manage-grid" id="coop-manage-container">
@@ -110,10 +114,10 @@
     <section id="tab-rewards" class="tab-panel">
       <div class="panel-top-bar">
         <div>
-          <h2>心愿商城与奖品库</h2>
-          <p>设立正向激励心愿目标，让孩子用日常自律积累的积分兑换心仪书籍、玩具或特权时光。</p>
+          <h2 data-i18n="rewards_panel_title">心愿商城与奖品库</h2>
+          <p data-i18n="rewards_panel_desc">设立正向激励心愿目标，让孩子用日常自律积累的积分兑换心仪书籍、玩具或特权时光。</p>
         </div>
-        <button class="btn btn-primary" onclick="openRewardModal()">＋ 添加心愿奖品</button>
+        <button class="btn btn-primary" onclick="openRewardModal()" data-i18n="add_reward_btn">＋ 添加心愿奖品</button>
       </div>
 
       <div class="rewards-manage-grid" id="rewards-manage-container">
@@ -125,26 +129,26 @@
     <section id="tab-system" class="tab-panel">
       <div class="panel-top-bar">
         <div>
-          <h2>网站标题与标语配置</h2>
-          <p>自定义您的专属家庭或团队名称，以及激励全家共同进步的座右铭/标语。</p>
+          <h2 data-i18n="system_panel_title">网站标题与标语配置</h2>
+          <p data-i18n="system_panel_desc">自定义您的专属家庭或团队名称，以及激励全家共同进步的座右铭/标语。</p>
         </div>
-        <button class="btn btn-primary" onclick="submitSystemSettingsForm()">💾 保存标题设置</button>
+        <button class="btn btn-primary" onclick="submitSystemSettingsForm()" data-i18n="save_settings_btn">💾 保存标题设置</button>
       </div>
 
       <div class="system-settings-card" style="background: var(--bg-card); padding: 24px; border-radius: var(--radius-lg); border: 1px solid var(--border-color); max-width: 680px;">
         <div class="form-group" style="margin-bottom: 18px;">
-          <label class="form-label" style="font-size: 14px; color: #fff; font-weight: 700;">网站标题 / 系统名称：</label>
-          <input type="text" id="setting-family-name" class="form-input" style="font-size: 15px; padding: 10px 14px; width: 100%; margin-top: 6px;" placeholder="例如：家庭积分奖励 / 幸福成长营 / 李家荣誉榜">
-          <span style="font-size: 12px; color: var(--text-muted); margin-top: 6px; display: block;">该标题将直接展示在看板左上角及浏览器标签页标题中。</span>
+          <label class="form-label" style="font-size: 14px; color: #fff; font-weight: 700;" data-i18n="site_title_label">网站标题 / 系统名称：</label>
+          <input type="text" id="setting-family-name" class="form-input" style="font-size: 15px; padding: 10px 14px; width: 100%; margin-top: 6px;" data-i18n-placeholder="site_title_placeholder" placeholder="例如：家庭积分奖励 / 幸福成长营 / 李家荣誉榜">
+          <span style="font-size: 12px; color: var(--text-muted); margin-top: 6px; display: block;" data-i18n="site_title_hint">该标题将直接展示在看板左上角及浏览器标签页标题中。</span>
         </div>
 
         <div class="form-group" style="margin-bottom: 24px;">
-          <label class="form-label" style="font-size: 14px; color: #fff; font-weight: 700;">家庭座右铭 / 励志标语：</label>
-          <input type="text" id="setting-family-motto" class="form-input" style="font-size: 15px; padding: 10px 14px; width: 100%; margin-top: 6px;" placeholder="例如：全家同行 · 互助自律 · 快乐成长">
-          <span style="font-size: 12px; color: var(--text-muted); margin-top: 6px; display: block;">展示在网站标题下方的副标题中，激励全员齐心协作。</span>
+          <label class="form-label" style="font-size: 14px; color: #fff; font-weight: 700;" data-i18n="site_motto_label">家庭座右铭 / 励志标语：</label>
+          <input type="text" id="setting-family-motto" class="form-input" style="font-size: 15px; padding: 10px 14px; width: 100%; margin-top: 6px;" data-i18n-placeholder="site_motto_placeholder" placeholder="例如：全家同行 · 互助自律 · 快乐成长">
+          <span style="font-size: 12px; color: var(--text-muted); margin-top: 6px; display: block;" data-i18n="site_motto_hint">展示在网站标题下方的副标题中，激励全员齐心协作。</span>
         </div>
 
-        <button class="btn btn-primary" onclick="submitSystemSettingsForm()" style="padding: 10px 24px; font-size: 14px;">💾 保存标题设置</button>
+        <button class="btn btn-primary" onclick="submitSystemSettingsForm()" style="padding: 10px 24px; font-size: 14px;" data-i18n="save_settings_btn">💾 保存标题设置</button>
       </div>
     </section>
 
@@ -364,6 +368,7 @@
 
   <div class="toast-container" id="toast-container"></div>
 
+  <script src="./i18n.js"></script>
   <script src="./config.js"></script>
 </body>
 </html>

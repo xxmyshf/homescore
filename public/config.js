@@ -3,6 +3,10 @@
 let configState = null;
 let currentTab = 'members';
 
+function _t(key, params) {
+  return window.I18N ? window.I18N.t(key, params) : key;
+}
+
 const AVATAR_OPTIONS = [
   '👦', '👧', '👶', '🧑', '👨‍💼', '👩‍🏫', '👴', '👵',
   '🦸‍♂️', '🦸‍♀️', '🧙‍♂️', '🧚‍♀️', '🦁', '🐼', '🦄', '🚀',
@@ -17,6 +21,17 @@ const THEME_COLORS = [
 document.addEventListener('DOMContentLoaded', () => {
   initPickers();
   loadConfigState();
+
+  window.addEventListener('homescore_lang_changed', () => {
+    if (configState) {
+      renderMembersList();
+      populateMemberDropdowns();
+      renderTasksList();
+      renderCoopList();
+      renderRewardsList();
+      renderSystemSettings();
+    }
+  });
 });
 
 function initPickers() {
@@ -106,22 +121,22 @@ function renderMembersList() {
 
       <div class="member-card-stats">
         <div>
-          <div class="stat-item-label">当前可用积分</div>
-          <div class="stat-item-val">${m.score} 分</div>
+          <div class="stat-item-label">${_t('col_available_score')}</div>
+          <div class="stat-item-val">${m.score} ${_t('points')}</div>
         </div>
         <div>
-          <div class="stat-item-label">历史总产出能值</div>
-          <div class="stat-item-val">${m.totalEarned || m.score} 分</div>
+          <div class="stat-item-label">${_t('col_lifetime_score')}</div>
+          <div class="stat-item-val">${m.totalEarned || m.score} ${_t('points')}</div>
         </div>
       </div>
 
       <div class="member-card-wish">
-        🎯 <strong>心愿目标：</strong>${escapeHtml(m.wishTitle || '心仪玩具')} (${m.wishCost || 100}分)
+        🎯 <strong>${_t('wish_target')}</strong>${escapeHtml(m.wishTitle || '')} (${m.wishCost || 100} ${_t('points')})
       </div>
 
       <div class="member-card-actions">
-        <button class="btn-card-edit" onclick="editMember('${m.id}')">✏️ 编辑人物档案</button>
-        <button class="btn-card-delete" onclick="deleteMember('${m.id}', '${escapeHtml(m.name)}')">🗑️ 删除</button>
+        <button class="btn-card-edit" onclick="editMember('${m.id}')">${_t('edit_member_btn')}</button>
+        <button class="btn-card-delete" onclick="deleteMember('${m.id}', '${escapeHtml(m.name)}')">${_t('delete_btn')}</button>
       </div>
     `;
     container.appendChild(card);
@@ -131,10 +146,10 @@ function renderMembersList() {
 function populateMemberDropdowns() {
   // Task filter
   const filterSelect = document.getElementById('filter-task-member');
-  filterSelect.innerHTML = `<option value="all">所有成员任务 (${configState.tasks.length}项)</option>`;
+  filterSelect.innerHTML = `<option value="all">${_t('filter_all_tasks')} (${configState.tasks.length})</option>`;
   configState.members.forEach(m => {
     const count = configState.tasks.filter(t => t.memberId === m.id).length;
-    filterSelect.innerHTML += `<option value="${m.id}">${m.avatar} ${escapeHtml(m.name)} (${count}项)</option>`;
+    filterSelect.innerHTML += `<option value="${m.id}">${m.avatar} ${escapeHtml(m.name)} (${count})</option>`;
   });
 
   // Task member selector
@@ -146,9 +161,9 @@ function populateMemberDropdowns() {
 
   // Reward member selector
   const rewMemberSelect = document.getElementById('reward-input-member');
-  rewMemberSelect.innerHTML = `<option value="">全家通用奖品</option>`;
+  rewMemberSelect.innerHTML = `<option value="">${_t('general_reward')}</option>`;
   configState.members.forEach(m => {
-    rewMemberSelect.innerHTML += `<option value="${m.id}">${m.avatar} ${escapeHtml(m.name)} 专属</option>`;
+    rewMemberSelect.innerHTML += `<option value="${m.id}">${m.avatar} ${_t('exclusive_for', { name: escapeHtml(m.name) })}</option>`;
   });
 }
 
@@ -283,11 +298,11 @@ function renderTasksList() {
       <td><span class="badge-member-tag">${mName}</span></td>
       <td><strong>${escapeHtml(t.title)}</strong></td>
       <td><span style="color:var(--text-secondary);">${escapeHtml(t.category)}</span></td>
-      <td><strong style="color:#38bdf8;">+${t.points} 分</strong></td>
-      <td><span style="color:var(--text-muted);">${t.frequency === 'daily' ? '每日重置' : '单次'}</span></td>
+      <td><strong style="color:#38bdf8;">+${t.points} ${_t('points')}</strong></td>
+      <td><span style="color:var(--text-muted);">${t.frequency === 'daily' ? _t('daily_reset') : _t('once')}</span></td>
       <td>
-        <button class="btn btn-secondary" style="padding:4px 8px;font-size:11px;" onclick="editTask('${t.id}')">编辑</button>
-        <button class="btn btn-danger-soft" style="padding:4px 8px;font-size:11px;" onclick="deleteTask('${t.id}')">删除</button>
+        <button class="btn btn-secondary" style="padding:4px 8px;font-size:11px;" onclick="editTask('${t.id}')">${_t('edit_btn')}</button>
+        <button class="btn btn-danger-soft" style="padding:4px 8px;font-size:11px;" onclick="deleteTask('${t.id}')">${_t('delete_btn')}</button>
       </td>
     `;
     tbody.appendChild(tr);
@@ -379,13 +394,13 @@ function renderCoopList() {
         <div style="font-size:32px;">${act.icon || '🤝'}</div>
         <div style="flex:1;">
           <h3 style="color:#fff;font-size:15px;font-weight:700;">${escapeHtml(act.title)}</h3>
-          <div style="font-size:12px;color:#34d399;font-weight:700;margin:2px 0;">全员各奖 +${act.pointsPerPerson} 积分 · <span style="color:var(--text-muted);font-weight:400;">${escapeHtml(act.tag || '共同协作')}</span></div>
+          <div style="font-size:12px;color:#34d399;font-weight:700;margin:2px 0;">${_t('coop_per_person', { n: act.pointsPerPerson })} · <span style="color:var(--text-muted);font-weight:400;">${escapeHtml(act.tag || _t('coop_hall_badge'))}</span></div>
           <p style="font-size:12px;color:var(--text-secondary);line-height:1.4;">${escapeHtml(act.description)}</p>
         </div>
       </div>
       <div style="display:flex;justify-content:flex-end;gap:8px;border-top:1px solid var(--border-color);padding-top:10px;">
-        <button class="btn btn-secondary" style="padding:4px 10px;font-size:11px;" onclick="editCoop('${act.id}')">编辑</button>
-        <button class="btn btn-danger-soft" style="padding:4px 10px;font-size:11px;" onclick="deleteCoop('${act.id}')">删除</button>
+        <button class="btn btn-secondary" style="padding:4px 10px;font-size:11px;" onclick="editCoop('${act.id}')">${_t('edit_btn')}</button>
+        <button class="btn btn-danger-soft" style="padding:4px 10px;font-size:11px;" onclick="deleteCoop('${act.id}')">${_t('delete_btn')}</button>
       </div>
     `;
     container.appendChild(card);
@@ -471,7 +486,7 @@ function renderRewardsList() {
 
   configState.rewards.forEach(r => {
     const m = configState.members.find(x => x.id === r.memberId);
-    const mName = m ? `${m.avatar} ${m.name} 专属` : '全员通用';
+    const mName = m ? `${m.avatar} ${_t('exclusive_for', { name: escapeHtml(m.name) })}` : _t('general_reward');
 
     const card = document.createElement('div');
     card.className = 'reward-manage-card';
@@ -480,10 +495,10 @@ function renderRewardsList() {
         <div style="font-size:28px;">${r.icon || '🎁'}</div>
         <div style="flex:1;">
           <h3 style="font-size:14px;color:#fff;font-weight:700;">${escapeHtml(r.title)}</h3>
-          <div style="font-size:11px;color:#facc15;font-weight:700;">需要 ${r.cost} 积分 · <span style="color:var(--text-muted);font-weight:400;">${mName}</span></div>
-          <div style="font-size:10px;color:var(--text-muted);margin-top:2px;">累计已兑换: ${r.redeemedCount || 0} 次</div>
+          <div style="font-size:11px;color:#facc15;font-weight:700;">${_t('need_points', { n: r.cost })} · <span style="color:var(--text-muted);font-weight:400;">${mName}</span></div>
+          <div style="font-size:10px;color:var(--text-muted);margin-top:2px;">${_t('redeemed_count', { n: r.redeemedCount || 0 })}</div>
         </div>
-        <button class="btn btn-danger-soft" style="padding:4px 8px;font-size:11px;" onclick="deleteReward('${r.id}')">删除</button>
+        <button class="btn btn-danger-soft" style="padding:4px 8px;font-size:11px;" onclick="deleteReward('${r.id}')">${_t('delete_btn')}</button>
       </div>
     `;
     container.appendChild(card);
