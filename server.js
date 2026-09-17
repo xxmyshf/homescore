@@ -188,6 +188,25 @@ app.post('/api/backup/import', (req, res) => {
   }
 });
 
+// System Settings (Website Title & Motto)
+app.post('/api/settings', (req, res) => {
+  try {
+    const updated = db.updateSystemSettings(req.body);
+    res.json({ success: true, data: updated });
+  } catch (err) {
+    res.status(400).json({ success: false, error: err.message });
+  }
+});
+
+app.put('/api/settings', (req, res) => {
+  try {
+    const updated = db.updateSystemSettings(req.body);
+    res.json({ success: true, data: updated });
+  } catch (err) {
+    res.status(400).json({ success: false, error: err.message });
+  }
+});
+
 app.post('/api/reset-defaults', (req, res) => {
   try {
     const state = db.resetToDefaults();

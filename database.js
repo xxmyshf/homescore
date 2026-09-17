@@ -855,6 +855,24 @@ class Database {
     return true;
   }
 
+  updateSystemSettings(data) {
+    if (!data) return this.state.system;
+    if (typeof data.familyName === 'string' && data.familyName.trim()) {
+      this.state.system.familyName = data.familyName.trim();
+      if (this.useSqlite) {
+        this.sqliteDb.prepare('INSERT OR REPLACE INTO settings (key, value) VALUES (?, ?)').run('familyName', JSON.stringify(this.state.system.familyName));
+      }
+    }
+    if (typeof data.familyMotto === 'string') {
+      this.state.system.familyMotto = data.familyMotto.trim();
+      if (this.useSqlite) {
+        this.sqliteDb.prepare('INSERT OR REPLACE INTO settings (key, value) VALUES (?, ?)').run('familyMotto', JSON.stringify(this.state.system.familyMotto));
+      }
+    }
+    this.saveToJson();
+    return this.state.system;
+  }
+
   resetToDefaults() {
     this.seedDefaults();
     return this.getFullState();

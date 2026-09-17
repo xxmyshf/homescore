@@ -78,6 +78,7 @@ async function loadConfigState() {
       renderTasksList();
       renderCoopList();
       renderRewardsList();
+      renderSystemSettings();
     }
   } catch (err) {
     console.error('Failed to load config state:', err);
@@ -587,6 +588,50 @@ async function resetDefaultsConfirm() {
     }
   } catch (err) {
     showToast('❌ 重置失败');
+  }
+}
+
+// 7. System Settings (Website Title & Motto)
+function renderSystemSettings() {
+  if (!configState || !configState.system) return;
+  const nameInput = document.getElementById('setting-family-name');
+  const mottoInput = document.getElementById('setting-family-motto');
+  const familyName = configState.system.familyName || '家庭积分奖励';
+  if (nameInput) nameInput.value = familyName;
+  if (mottoInput) mottoInput.value = configState.system.familyMotto || '全家同行 · 互助自律 · 快乐成长';
+  document.title = `${familyName} · 人物与家庭配置中心`;
+}
+
+async function submitSystemSettingsForm() {
+  const nameInput = document.getElementById('setting-family-name');
+  const mottoInput = document.getElementById('setting-family-motto');
+  const familyName = (nameInput ? nameInput.value : '').trim();
+  const familyMotto = (mottoInput ? mottoInput.value : '').trim();
+
+  if (!familyName) {
+    showToast('⚠️ 网站标题不能为空');
+    return;
+  }
+
+  try {
+    const res = await fetch('/api/settings', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ familyName, familyMotto })
+    });
+    const json = await res.json();
+    if (json.success) {
+      if (configState && configState.system) {
+        configState.system.familyName = familyName;
+        configState.system.familyMotto = familyMotto;
+      }
+      renderSystemSettings();
+      showToast(`✅ 网站标题已更新为「${familyName}」`);
+    } else {
+      showToast('❌ 保存失败：' + json.error);
+    }
+  } catch (err) {
+    showToast('❌ 网络错误');
   }
 }
 
