@@ -557,7 +557,12 @@ async function deleteReward(id) {
 
 // 6. Data Backup & Reset
 function exportDataBackup() {
-  window.location.href = '/api/backup/export';
+  if (window.HS && window.HS.downloadBackup) {
+    const filename = window.HS.downloadBackup();
+    showToast(`✅ 已导出数据备份：${filename}`);
+  } else {
+    window.location.href = '/api/backup/export';
+  }
 }
 
 function triggerImportBackup() {

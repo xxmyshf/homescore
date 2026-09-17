@@ -106,7 +106,32 @@
       var raw = global.localStorage.getItem(STORAGE_KEY);
       if (raw) {
         var parsed = JSON.parse(raw);
-        if (parsed && Array.isArray(parsed.members)) {
+        if (parsed && typeof parsed === 'object') {
+          var defaults = seedDefaults();
+          if (!Array.isArray(parsed.members) || parsed.members.length === 0) {
+            parsed.members = defaults.members;
+          }
+          if (!parsed.system || typeof parsed.system !== 'object') {
+            parsed.system = defaults.system;
+          } else {
+            if (!parsed.system.familyName) parsed.system.familyName = defaults.system.familyName;
+            if (!parsed.system.familyMotto) parsed.system.familyMotto = defaults.system.familyMotto;
+          }
+          if (Array.isArray(parsed.members)) {
+            parsed.members.forEach(function (m) {
+              if (m && m.totalEarned == null) m.totalEarned = m.score || 0;
+              if (m && m.level == null) m.level = 1;
+              if (m && !m.themeColor) m.themeColor = '#6366f1';
+            });
+          }
+          if (!Array.isArray(parsed.tasks) || parsed.tasks.length === 0) {
+            parsed.tasks = defaults.tasks;
+          }
+          if (!Array.isArray(parsed.coopActivities) || parsed.coopActivities.length === 0) {
+            parsed.coopActivities = defaults.coopActivities;
+          }
+          if (!Array.isArray(parsed.rewards)) parsed.rewards = defaults.rewards;
+          if (!Array.isArray(parsed.logs)) parsed.logs = defaults.logs;
           return parsed;
         }
       }
@@ -152,17 +177,23 @@
   };
 
   Store.prototype.checkDailyRollover = function () {
+    if (!this.state) this.state = seedDefaults();
+    if (!this.state.system) this.state.system = clone(DEFAULT_SYSTEM);
     var today = new Date().toISOString().split('T')[0];
     if (this.state.system.lastRolloverDate !== today) {
-      for (var i = 0; i < this.state.tasks.length; i++) {
-        var task = this.state.tasks[i];
-        if (task.frequency === 'daily') {
-          task.completed = 0;
-          task.completedAt = null;
+      if (Array.isArray(this.state.tasks)) {
+        for (var i = 0; i < this.state.tasks.length; i++) {
+          var task = this.state.tasks[i];
+          if (task && task.frequency === 'daily') {
+            task.completed = 0;
+            task.completedAt = null;
+          }
         }
       }
-      for (var j = 0; j < this.state.coopActivities.length; j++) {
-        this.state.coopActivities[j].completedToday = 0;
+      if (Array.isArray(this.state.coopActivities)) {
+        for (var j = 0; j < this.state.coopActivities.length; j++) {
+          if (this.state.coopActivities[j]) this.state.coopActivities[j].completedToday = 0;
+        }
       }
       this.state.system.lastRolloverDate = today;
       this.state.system.streakDays = (this.state.system.streakDays || 0) + 1;

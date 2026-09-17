@@ -274,7 +274,7 @@ async function loadState() {
 
 // Render Header Stats
 function renderHeaderStats() {
-  const { system, members, logs } = appState;
+  const { system, members, logs } = appState || {};
   const defaultTitle = _t('site_default_title');
   const defaultMotto = _t('site_default_motto');
   const familyName = (system && system.familyName) || defaultTitle;
@@ -287,17 +287,28 @@ function renderHeaderStats() {
     mottoEl.textContent = (system && system.familyMotto) || defaultMotto;
   }
   document.title = `${familyName} · 21:9`;
-  document.getElementById('stat-streak').textContent = `${system.streakDays || 1} ${_t('days')}`;
+  const streakEl = document.getElementById('stat-streak');
+  if (streakEl) {
+    streakEl.textContent = `${(system && system.streakDays) || 1} ${_t('days')}`;
+  }
 
-  const totalFamilyScore = members.reduce((sum, m) => sum + (m.score || 0), 0);
-  document.getElementById('stat-family-score').textContent = `${totalFamilyScore} ${_t('points')}`;
+  const memberList = Array.isArray(members) ? members : [];
+  const totalFamilyScore = memberList.reduce((sum, m) => sum + (m.score || 0), 0);
+  const famScoreEl = document.getElementById('stat-family-score');
+  if (famScoreEl) {
+    famScoreEl.textContent = `${totalFamilyScore} ${_t('points')}`;
+  }
 
   // Calculate today's gain from logs
   const todayStr = new Date().toISOString().split('T')[0];
-  const todayGain = logs
-    .filter(l => l.timestamp.startsWith(todayStr) && l.change > 0)
-    .reduce((sum, l) => sum + l.change, 0);
-  document.getElementById('stat-today-gain').textContent = `+${todayGain} ${_t('points')}`;
+  const logList = Array.isArray(logs) ? logs : [];
+  const todayGain = logList
+    .filter(l => l && typeof l.timestamp === 'string' && l.timestamp.startsWith(todayStr) && l.change > 0)
+    .reduce((sum, l) => sum + (l.change || 0), 0);
+  const todayGainEl = document.getElementById('stat-today-gain');
+  if (todayGainEl) {
+    todayGainEl.textContent = `+${todayGain} ${_t('points')}`;
+  }
 }
 
 // Render Family Co-op Quests
@@ -305,7 +316,7 @@ function renderCoopActivities() {
   const container = document.getElementById('coop-cards-container');
   container.innerHTML = '';
 
-  appState.coopActivities.forEach(act => {
+  (appState.coopActivities || []).forEach(act => {
     const card = document.createElement('div');
     card.className = 'coop-card';
     card.innerHTML = `
@@ -333,19 +344,22 @@ function renderMembers() {
   const container = document.getElementById('members-container');
   container.innerHTML = '';
 
-  appState.members.forEach(member => {
-    const memberTasks = appState.tasks.filter(t => t.memberId === member.id);
+  (appState.members || []).forEach(member => {
+    const memberTasks = (appState.tasks || []).filter(t => t.memberId === member.id);
     const completedTasksCount = memberTasks.filter(t => t.completed).length;
 
     // Calculate level & XP
-    const nextLevelThreshold = getNextLevelTarget(member.totalEarned || member.score);
-    const currentLevelBase = getPrevLevelThreshold(member.totalEarned || member.score);
-    const progressPercent = Math.min(100, Math.round(((member.totalEarned - currentLevelBase) / (nextLevelThreshold - currentLevelBase)) * 100));
+    const totalEarned = Number(member.totalEarned != null ? member.totalEarned : (member.score || 0));
+    const nextLevelThreshold = getNextLevelTarget(totalEarned);
+    const currentLevelBase = getPrevLevelThreshold(totalEarned);
+    const denom = Math.max(1, nextLevelThreshold - currentLevelBase);
+    const progressPercent = Math.min(100, Math.max(0, Math.round(((totalEarned - currentLevelBase) / denom) * 100)));
 
     // Wish progress
     const wishCost = member.wishCost || 100;
-    const wishProgressPercent = Math.min(100, Math.round((member.score / wishCost) * 100));
-    const canRedeemWish = member.score >= wishCost;
+    const currentScore = member.score || 0;
+    const wishProgressPercent = Math.min(100, Math.max(0, Math.round((currentScore / wishCost) * 100)));
+    const canRedeemWish = currentScore >= wishCost;
 
     const col = document.createElement('div');
     col.className = 'member-column-card';
@@ -370,8 +384,8 @@ function renderMembers() {
                 <div class="level-progress-fill" style="width: ${progressPercent}%;"></div>
               </div>
               <div class="level-text-sub">
-                <span>${_t('growth_score')}: ${member.totalEarned || member.score}</span>
-                <span>${_t('next_level_need', { n: Math.max(0, nextLevelThreshold - member.totalEarned) })}</span>
+                <span>${_t('growth_score')}: ${totalEarned}</span>
+                <span>${_t('next_level_need', { n: Math.max(0, nextLevelThreshold - totalEarned) })}</span>
               </div>
             </div>
           </div>
@@ -381,10 +395,10 @@ function renderMembers() {
       <!-- Score Display -->
       <div class="member-score-display">
         <div class="score-main">
-          <span class="score-num" id="score-num-${member.id}">${member.score}</span>
+          <span class="score-num" id="score-num-${member.id}">${member.score || 0}</span>
           <span class="score-unit">${_t('current_available_score')}</span>
         </div>
-        <div class="score-lifetime">${_t('lifetime_score', { n: member.totalEarned || member.score })}</div>
+        <div class="score-lifetime">${_t('lifetime_score', { n: totalEarned })}</div>
       </div>
 
       <!-- Quick Adjust Strip -->
