@@ -27,10 +27,10 @@
     <!-- Top Header: Command Bar -->
     <header class="top-nav">
       <div class="nav-left">
-        <div class="brand-logo">
+        <div class="brand-logo" id="brand-logo-btn" title="点击修改网站标题与标语" style="cursor: pointer;">
           <span class="logo-icon">🏆</span>
           <div class="brand-text">
-            <div class="brand-title" id="family-name">家庭积分奖励</div>
+            <div class="brand-title" id="family-name">家庭积分奖励 <span class="edit-title-badge" title="点击修改网站标题">✏️</span></div>
             <div class="brand-sub" id="family-motto">全家同行 · 互助自律 · 快乐成长</div>
           </div>
         </div>
@@ -257,6 +257,30 @@
       <div class="modal-footer">
         <button class="btn btn-secondary" onclick="closeQuickTaskModal()">取消</button>
         <button class="btn btn-primary" onclick="submitQuickTask()">添加任务</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal: Edit Website Title & Motto -->
+  <div class="modal-backdrop" id="modal-edit-title" style="display: none;">
+    <div class="modal-box">
+      <div class="modal-header">
+        <div class="modal-title">🏷️ 修改网站标题与标语</div>
+        <button class="modal-close" onclick="closeTitleModal()">✕</button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label class="form-label">网站标题 / 系统名称：</label>
+          <input type="text" id="input-site-title" class="form-input" placeholder="例如：家庭积分奖励 / 张家成长营 / 幸福一家人">
+        </div>
+        <div class="form-group">
+          <label class="form-label">家庭座右铭 / 励志标语：</label>
+          <input type="text" id="input-site-motto" class="form-input" placeholder="例如：全家同行 · 互助自律 · 快乐成长">
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" onclick="closeTitleModal()">取消</button>
+        <button class="btn btn-primary" onclick="submitTitleModal()">保存并应用</button>
       </div>
     </div>
   </div>

@@ -457,6 +457,18 @@
     return true;
   };
 
+  Store.prototype.updateSystemSettings = function (data) {
+    if (!data) return clone(this.state.system);
+    if (typeof data.familyName === 'string' && data.familyName.trim()) {
+      this.state.system.familyName = data.familyName.trim();
+    }
+    if (typeof data.familyMotto === 'string') {
+      this.state.system.familyMotto = data.familyMotto.trim();
+    }
+    this.save();
+    return clone(this.state.system);
+  };
+
   Store.prototype.resetToDefaults = function () {
     this.state = seedDefaults();
     this.checkDailyRollover();
@@ -505,6 +517,11 @@
     if (method === 'POST' && path === 'backup/import') return run(function () { return store.importBackup(body); });
     // 重置默认
     if (method === 'POST' && path === 'reset-defaults') return ok(store.resetToDefaults());
+
+    // 系统设置（修改网站标题与标语）
+    if (a === 'settings' && (method === 'POST' || method === 'PUT')) {
+      return run(function () { return store.updateSystemSettings(body); });
+    }
 
     // 成员
     if (a === 'members') {

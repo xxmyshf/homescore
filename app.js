@@ -227,6 +227,12 @@ function setupEventListeners() {
   document.getElementById('btn-quick-coop-info').addEventListener('click', () => {
     showToast('💡 协作理念：打破单向说教，家长示范与孩子共同达标，每完成一项，全家齐心各加积分！');
   });
+
+  // Edit Website Title & Motto
+  const brandLogoBtn = document.getElementById('brand-logo-btn');
+  if (brandLogoBtn) {
+    brandLogoBtn.addEventListener('click', openTitleModal);
+  }
 }
 
 // --- Fetch & Render State ---
@@ -250,8 +256,16 @@ async function loadState() {
 // Render Header Stats
 function renderHeaderStats() {
   const { system, members, logs } = appState;
-  document.getElementById('family-name').textContent = system.familyName || '家庭模范战队';
-  document.getElementById('family-motto').textContent = system.familyMotto || '齐心同行 · 快乐成长';
+  const familyName = (system && system.familyName) || '家庭积分奖励';
+  const familyEl = document.getElementById('family-name');
+  if (familyEl) {
+    familyEl.innerHTML = `${escapeHtml(familyName)} <span class="edit-title-badge" title="点击修改网站标题">✏️</span>`;
+  }
+  const mottoEl = document.getElementById('family-motto');
+  if (mottoEl) {
+    mottoEl.textContent = (system && system.familyMotto) || '全家同行 · 互助自律 · 快乐成长';
+  }
+  document.title = `${familyName} · 21:9 超宽屏协同看板`;
   document.getElementById('stat-streak').textContent = `${system.streakDays || 1} 天`;
 
   const totalFamilyScore = members.reduce((sum, m) => sum + (m.score || 0), 0);
@@ -790,6 +804,58 @@ function showToast(msg) {
   setTimeout(() => {
     if (toast.parentNode) toast.parentNode.removeChild(toast);
   }, 3000);
+}
+
+// --- Title Modal Functions ---
+function openTitleModal() {
+  const currentTitle = (appState && appState.system && appState.system.familyName) || '家庭积分奖励';
+  const currentMotto = (appState && appState.system && appState.system.familyMotto) || '全家同行 · 互助自律 · 快乐成长';
+  const inputTitle = document.getElementById('input-site-title');
+  const inputMotto = document.getElementById('input-site-motto');
+  if (inputTitle) inputTitle.value = currentTitle;
+  if (inputMotto) inputMotto.value = currentMotto;
+  const modal = document.getElementById('modal-edit-title');
+  if (modal) modal.style.display = 'flex';
+}
+
+function closeTitleModal() {
+  const modal = document.getElementById('modal-edit-title');
+  if (modal) modal.style.display = 'none';
+}
+
+async function submitTitleModal() {
+  const inputTitle = document.getElementById('input-site-title');
+  const inputMotto = document.getElementById('input-site-motto');
+  const newTitle = (inputTitle ? inputTitle.value : '').trim();
+  const newMotto = (inputMotto ? inputMotto.value : '').trim();
+
+  if (!newTitle) {
+    showToast('⚠️ 网站标题不能为空');
+    return;
+  }
+
+  try {
+    const res = await HS.localFetch('/api/settings', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ familyName: newTitle, familyMotto: newMotto })
+    });
+    const json = await res.json();
+    if (json.success) {
+      if (appState && appState.system) {
+        appState.system.familyName = newTitle;
+        appState.system.familyMotto = newMotto;
+      }
+      renderHeaderStats();
+      closeTitleModal();
+      showToast(`🏷️ 网站标题已更新为「${newTitle}」`);
+      soundEngine.playSuccess();
+    } else {
+      showToast('❌ 保存失败：' + json.error);
+    }
+  } catch (err) {
+    showToast('❌ 保存异常');
+  }
 }
 
 // --- Utility: Escape HTML ---
