@@ -350,8 +350,12 @@
     // Update switcher button label
     var btn = document.getElementById('btn-lang-toggle');
     if (btn) {
-      var label = btn.querySelector('.btn-label') || btn;
-      label.textContent = lang === 'zh' ? '🌐 English' : '🌐 中文';
+      var label = btn.querySelector('.btn-label');
+      if (label) {
+        label.textContent = lang === 'zh' ? 'English' : '中文';
+      } else {
+        btn.textContent = lang === 'zh' ? '🌐 English' : '🌐 中文';
+      }
     }
   }
 

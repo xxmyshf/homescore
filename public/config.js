@@ -82,9 +82,26 @@ function switchTab(tabName) {
   if (panel) panel.classList.add('active');
 }
 
+// Smart Fetch: Use real backend if available, fallback to client store.js if offline/static
+async function smartFetch(url, options) {
+  try {
+    const res = await fetch(url, options);
+    if (res.ok) return res;
+    if (window.HS && window.HS.localFetch) {
+      return await window.HS.localFetch(url, options);
+    }
+    return res;
+  } catch (err) {
+    if (window.HS && window.HS.localFetch) {
+      return await window.HS.localFetch(url, options);
+    }
+    throw err;
+  }
+}
+
 async function loadConfigState() {
   try {
-    const res = await fetch('/api/state');
+    const res = await smartFetch('/api/state');
     const json = await res.json();
     if (json.success && json.data) {
       configState = json.data;
@@ -238,7 +255,7 @@ async function submitMemberForm() {
   try {
     const url = id ? `/api/members/${id}` : '/api/members';
     const method = id ? 'PUT' : 'POST';
-    const res = await fetch(url, {
+    const res = await smartFetch(url, {
       method,
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(payload)
@@ -260,7 +277,7 @@ async function deleteMember(id, name) {
   if (!confirm(`确定删除人物【${name}】吗？该人物的所有专属任务和心愿也将同步移除。`)) return;
 
   try {
-    const res = await fetch(`/api/members/${id}`, { method: 'DELETE' });
+    const res = await smartFetch(`/api/members/${id}`, { method: 'DELETE' });
     const json = await res.json();
     if (json.success) {
       showToast(`🗑️ 已删除人物：${name}`);
@@ -349,7 +366,7 @@ async function submitTaskForm() {
   try {
     const url = id ? `/api/tasks/${id}` : '/api/tasks';
     const method = id ? 'PUT' : 'POST';
-    const res = await fetch(url, {
+    const res = await smartFetch(url, {
       method,
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(payload)
@@ -370,7 +387,7 @@ async function submitTaskForm() {
 async function deleteTask(id) {
   if (!confirm('确认删除该任务吗？')) return;
   try {
-    const res = await fetch(`/api/tasks/${id}`, { method: 'DELETE' });
+    const res = await smartFetch(`/api/tasks/${id}`, { method: 'DELETE' });
     const json = await res.json();
     if (json.success) {
       showToast('🗑️ 任务已删除');
@@ -452,7 +469,7 @@ async function submitCoopConfigForm() {
   try {
     const url = id ? `/api/coop/${id}` : '/api/coop';
     const method = id ? 'PUT' : 'POST';
-    const res = await fetch(url, {
+    const res = await smartFetch(url, {
       method,
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(payload)
@@ -471,7 +488,7 @@ async function submitCoopConfigForm() {
 async function deleteCoop(id) {
   if (!confirm('确认删除该全家协作活动吗？')) return;
   try {
-    await fetch(`/api/coop/${id}`, { method: 'DELETE' });
+    await smartFetch(`/api/coop/${id}`, { method: 'DELETE' });
     showToast('🗑️ 已删除协作活动');
     loadConfigState();
   } catch (err) {
@@ -528,7 +545,7 @@ async function submitRewardForm() {
   }
 
   try {
-    const res = await fetch('/api/rewards', {
+    const res = await smartFetch('/api/rewards', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ memberId, title, icon, category, cost })
@@ -547,7 +564,7 @@ async function submitRewardForm() {
 async function deleteReward(id) {
   if (!confirm('确认删除该心愿奖品吗？')) return;
   try {
-    await fetch(`/api/rewards/${id}`, { method: 'DELETE' });
+    await smartFetch(`/api/rewards/${id}`, { method: 'DELETE' });
     showToast('🗑️ 已删除奖品');
     loadConfigState();
   } catch (err) {
@@ -557,7 +574,12 @@ async function deleteReward(id) {
 
 // 6. Data Backup & Reset
 function exportDataBackup() {
-  window.location.href = '/api/backup/export';
+  if (window.HS && window.HS.downloadBackup) {
+    const filename = window.HS.downloadBackup();
+    showToast(`✅ 已导出数据备份：${filename}`);
+  } else {
+    window.location.href = '/api/backup/export';
+  }
 }
 
 function triggerImportBackup() {
@@ -572,7 +594,7 @@ async function handleFileImport(e) {
   reader.onload = async (evt) => {
     try {
       const parsed = JSON.parse(evt.target.result);
-      const res = await fetch('/api/backup/import', {
+      const res = await smartFetch('/api/backup/import', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(parsed)
@@ -595,7 +617,7 @@ async function resetDefaultsConfirm() {
   if (!confirm('⚠️ 警告：确认要重置为默认的示例数据吗？当前所有自定义修改将被重置。')) return;
 
   try {
-    const res = await fetch('/api/reset-defaults', { method: 'POST' });
+    const res = await smartFetch('/api/reset-defaults', { method: 'POST' });
     const json = await res.json();
     if (json.success) {
       showToast('🔄 已重置为默认家庭数据');
@@ -629,7 +651,7 @@ async function submitSystemSettingsForm() {
   }
 
   try {
-    const res = await fetch('/api/settings', {
+    const res = await smartFetch('/api/settings', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ familyName, familyMotto })
